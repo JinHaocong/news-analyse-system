@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import *
 
 
@@ -33,6 +34,7 @@ class NewsAdmin(admin.ModelAdmin):
     ]
     list_per_page = 10
     list_max_show_all = 200
+    ordering = ['-intime']
 
 
 admin.site.register(News, NewsAdmin)
