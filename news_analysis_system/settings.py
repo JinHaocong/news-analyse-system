@@ -12,13 +12,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 from pickle import TRUE
+
 from corsheaders.defaults import default_methods, default_headers
 
 # from django.contrib.auth.middleware import AuthenticationMiddleware
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -30,7 +30,6 @@ SECRET_KEY = "django-insecure-)-xdkb8=2#k2+k312@pr4m8w(4xoms!v35us4_ffnnq_*#++zr
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -87,17 +86,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "news_analysis_system.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'news_analyse_system',  # 数据库名
+        'USER': 'root',  # mysql账户名
+        'PASSWORD': '123456',  # mysql密码
+        'HOST': '127.0.0.1',  # mysql主机
+        'PORT': 3306,  # mysql端口
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -117,7 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -131,7 +131,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 STATIC_URL = "/assets/"
@@ -143,7 +142,6 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(HERE, "dist/assets"),
 )
-
 
 # 如上图所示，首页基础展示项目由三个部分组成，往往我们需要对首页进行定制重写，这里我们先把这几个展示模块先关闭
 # project的setting文件最后追加如下设置，即可关闭以上几个模块以及信息采集模块
