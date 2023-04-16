@@ -199,17 +199,17 @@ export default {
         },
         handleCurrentChange(page) {
             this.commentForm.page = page
-            this.getlist()
+            this.getList()
         },
         handleSizeChange(val) {
             this.commentForm.pagesize = val
-            this.getlist()
+            this.getList()
         },
         search() {
             this.commentForm.page = 1
-            this.getlist()
+            this.getList()
         },
-        getlist() {
+        getList() {
             request.post('/news/', this.commentForm)
                 .then((res) => {
                     this.commentList = res.data.result
@@ -228,16 +228,16 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
-    background: var(--el-fill-color-light);
+    background: #f0f2f5;
     color: var(--el-text-color-secondary);
     font-size: 30px;
 }
 
-::v-deep .el-pagination {
+:deep(.el-pagination) {
     --el-pagination-background-color: #f0f2f5;
 }
 
-::v-deep .el-pagination button:disabled {
+:deep(.el-pagination) button:disabled {
     background-color: #f0f2f5;
     cursor: not-allowed;
 }

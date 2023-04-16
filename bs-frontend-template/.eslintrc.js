@@ -28,7 +28,7 @@ module.exports = {
             }
         }],
         'vue/singleline-html-element-content-newline': 'off',
-        'vue/multiline-html-element-content-newline':'off',
+        'vue/multiline-html-element-content-newline': 'off',
         'vue/html-indent': ['error', 4],
         indent: ['error', 4], // 4行缩进
         'vue/script-indent': ['error', 4],
@@ -41,7 +41,6 @@ module.exports = {
         'space-before-blocks': 'error', // 在块之前强制保持一致的间距
         'space-before-function-paren': ['error', 'never'], // 在“ function”定义打开括号之前强制不加空格
         'space-in-parens': ['error', 'never'], // 强制括号左右的不加空格
-        'space-infix-ops': 'error', // 运算符之间留有间距
         'spaced-comment': ['error', 'always'], // 注释间隔
         'template-tag-spacing': ['error', 'always'], // 在模板标签及其文字之间需要空格
         'no-var': 'error',
@@ -64,6 +63,7 @@ module.exports = {
         // 路径别名设置
         'no-submodule-imports': ['off', '/@'],
         'no-implicit-dependencies': ['off', ['/@']],
-        '@typescript-eslint/no-explicit-any': 'off' // 类型可以使用any  
+        '@typescript-eslint/no-explicit-any': 'off', // 类型可以使用any
+        '@typescript-eslint/explicit-module-boundary-types': 'off'
     }
 }
