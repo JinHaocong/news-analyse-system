@@ -232,4 +232,13 @@ export default {
     color: var(--el-text-color-secondary);
     font-size: 30px;
 }
+
+::v-deep .el-pagination {
+    --el-pagination-background-color: #f0f2f5;
+}
+
+::v-deep .el-pagination button:disabled {
+    background-color: #f0f2f5;
+    cursor: not-allowed;
+}
 </style>
