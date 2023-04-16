@@ -214,7 +214,6 @@ export default {
                 .then((res) => {
                     this.commentList = res.data.result
                     this.commentForm.total = res.data.total
-                    console.log(res)
                 })
         }
     }
