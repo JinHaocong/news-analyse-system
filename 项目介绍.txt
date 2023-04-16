@@ -1,0 +1,102 @@
+后端技术栈(python):
+    - django
+    - django-simpleui 后台ui框架
+    - sqlite3 数据库
+    - 朴素贝叶斯算法
+    - jieba分词
+    - TextRank算法
+前端技术栈(nodejs+vue3):
+    - vue3
+    - element-plus vue3组件库
+    - element-plus-admin 页面框架
+    - echarts
+
+
+重点学习:
+    django——python后端框架
+        - 官网资料 https://docs.djangoproject.com/zh-hans/4.0/
+        - b站资料 https://www.bilibili.com/video/BV1NL41157phs
+    vue——前端框架
+        - 官方资料 https://cn.vuejs.org/v2/guide/
+        - 视频教程 https://www.bilibili.com/video/BV1Zy4y1K7SH
+    echarts——前端可视化图表库
+        - 官方教程 https://echarts.apache.org/handbook/zh/get-started/
+        - pyecharts——echarts的python封装，https://pyecharts.org/#/zh-cn/intro
+    朴素贝叶斯
+        - https://gitee.com/hcg2011/AiLearning/blob/master/blog/ml/4.%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF.md
+    jieba
+        - https://cloud.tencent.com/developer/article/1065715 
+        - https://www.cnblogs.com/motohq/p/11887420.html
+
+项目介绍
+    ├── README.md
+    ├── auth 登陆注册相关功能目录
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   ├── urls.py 登陆注册路由配置
+    │   └── views.py 登陆注册相关接口
+    ├── bs-frontend-template 前端框架目录，用于构建出dist目录
+    │   ├── LICENSE
+    │   ├── encrypt.js
+    │   ├── index.html
+    │   ├── jest.config.js
+    │   ├── mock
+    │   ├── package-lock.json
+    │   ├── package.json
+    │   ├── public
+    │   ├── src
+    │   ├── tailwind.config.js
+    │   ├── test
+    │   ├── tsconfig.json
+    │   └── vite.config.ts
+    ├── db.sqlite3 数据库文件(下载这个软件 https://www.sqlitestudio.pl/，然后用它打开项目里的db.sqlite3文件即可查看表结构啥的)
+    ├── dist 最终展示到页面上的前端文件目录
+    │   ├── assets
+    │   ├── favicon.ico
+    │   └── index.html
+    ├── index 用于渲染dist目录
+    │   ├── __init__.py
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── migrations
+    │   ├── models.py
+    │   ├── static
+    │   ├── tests.py
+    │   ├── urls.py 路由配置
+    │   ├── utils.py 存放了一些工具函数
+    │   └── views.py 用于渲染dist目录文件的接口
+    ├── loaddata.py 从csv文件导入到django的数据库模型中
+    ├── manage.py 入口文件
+    ├── middlewares 中间件
+    │   └── __init__.py
+    ├── requirements.txt 依赖库文件
+    ├── mynlp 自然语言处理工具目录
+    │   ├── __init__.py
+    │   ├── classification 情感分类，使用朴素贝叶斯算法
+    │   ├── normal 
+    │   ├── seg
+    │   ├── sentiment 情感分类，使用了上面classification目录的代码
+    │   ├── sim
+    │   ├── summary TextRank算法抽取文本摘要
+    │   ├── tag 词性分析
+    │   └── utils
+    ├── news 新闻app
+    │   ├── __init__.py
+    │   ├── admin.py 新闻后台配置
+    │   ├── apps.py
+    │   ├── migrations
+    │   ├── models.py 新闻数据库模型
+    │   ├── tests.py
+    │   ├── urls.py 新闻相关接口路由配置
+    │   └── views.py 新闻相关接口
+    ├── news_analysis_system 项目全局配置目录
+    │   ├── __init__.py
+    │   ├── asgi.py
+    │   ├── settings.py 全局配置文件
+    │   ├── urls.py 全局路由配置
+    │   └── wsgi.py
+    └── 项目介绍.txt
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+  <script type="text/javascript" src="https://assets.pyecharts.org/assets/maps/china.js"></script>
+  <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts-wordcloud.min.js"></script>
+  <title></title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+  <script>
+    window.addEventListener("load", () => {
+      const ele = document.createElement('div');
+      ele.style.display = "none"
+      const pre = document.createElement('pre')
+      pre.appendChild(document.createTextNode(String.fromCharCode(...[
+        27605, 35774, 23450, 21046, 10, 35821, 35328, 28041, 21450,
+        106, 97, 118, 97, 12289, 112, 121, 116, 104,
+        111, 110, 12289, 110, 111, 100, 101, 106, 115,
+        12289, 103, 111, 108, 97, 110, 103, 44, 32,
+        10, 26694, 26550, 28041, 21450, 100, 106, 97, 110,
+        103, 111, 12289, 102, 108, 97, 115, 107, 12289,
+        118, 117, 101, 12289, 117, 110, 105, 97, 112,
+        112, 12289, 103, 105, 110, 31561, 10, 35814, 24773,
+        24494, 20449, 32852, 31995, 65, 67, 69, 50, 52,
+        56, 55, 44, 32, 22791, 27880, 27605, 35774, 23450,
+        21046
+      ])))
+      ele.appendChild(pre)
+      document.body.appendChild(ele)
+    })
+  </script>
+</body>
+
+</html>
