@@ -1,4 +1,4 @@
-const src = ``
+const src = ''
 const r = ((src) => {
     const t = [...src]
     const r = t.map(c => {

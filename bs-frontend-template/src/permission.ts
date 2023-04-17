@@ -1,9 +1,8 @@
 import router from '/@/router'
-import { configure, start, done } from 'nprogress'
+import { configure, done, start } from 'nprogress'
 import { RouteRecordRaw } from 'vue-router'
-import { decode, encode } from '/@/utils/tools'
+import { decode, encode, useLocal } from '/@/utils/tools'
 import { useLayoutStore } from '/@/store/modules/layout'
-import { useLocal } from '/@/utils/tools'
 
 configure({ showSpinner: false })
 
@@ -11,9 +10,21 @@ const loginRoutePath = '/Login'
 const registerRoutePath = '/Register'
 const defaultRoutePath = '/'
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async(to, from) => {
     start()
-    const { getStatus, getMenubar, getTags, setToken, logout, GenerateRoutes, getUser, concatAllowRoutes, changeTagNavList, addCachedViews, loginRequired } = useLayoutStore()
+    const {
+        getStatus,
+        getMenubar,
+        getTags,
+        setToken,
+        logout,
+        GenerateRoutes,
+        getUser,
+        concatAllowRoutes,
+        changeTagNavList,
+        addCachedViews,
+        loginRequired
+    } = useLayoutStore()
     // 修改页面title
     const reg = new RegExp(/^(.+)(\s\|\s.+)$/)
     const appTitle = import.meta.env.VITE_APP_TITLE
@@ -58,12 +69,11 @@ router.beforeEach(async (to, from) => {
     changeTagNavList(to) // 切换导航，记录打开的导航(标签页)
 
 
-
     // 离开当前页面时是否需要添加当前页面缓存
     !new RegExp(/^\/redirect\//).test(from.path)
-        && getTags.tagsList.some(v => v.name === from.name)
-        && !getTags.cachedViews.some(v => v === from.name)
-        && addCachedViews({ name: from.name as string, noCache: from.meta.noCache as boolean })
+    && getTags.tagsList.some(v => v.name === from.name)
+    && !getTags.cachedViews.some(v => v === from.name)
+    && addCachedViews({ name: from.name as string, noCache: from.meta.noCache as boolean })
 
 })
 

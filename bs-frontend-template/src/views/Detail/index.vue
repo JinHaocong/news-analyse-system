@@ -1,66 +1,65 @@
 <template>
-  <div v-if="detail" style="padding: 30px">
-    <h1 class="main-title">{{ detail.title }}</h1>
-    <div class="desc">
-      <el-button
-        @click="viewCommentDetail(detail.text, detail.subject)"
-        type="primary"
-        size="mini"
-        >内容分析
-      </el-button>
-      <span title="点击率">
-        <svg-icon
-          class-name="svg-icon"
-          icon-class="svg-eye-open"
-          style="display: inline"
-        />
-        {{ detail.view_count }}
-      </span>
-      <span>
-        {{ detail.intime }}
-      </span>
-      <span>
-        {{ detail.media_name }}
-      </span>
-      <span v-if="detail.keywords">
-        <el-tag
-          v-for="t in detail.keywords.split(',')"
-          :key="t"
-          type="info"
-          style="margin: 0 5px 5px 0; cursor: pointer"
-          effect="plain"
-          >{{ t }}</el-tag
-        >
-      </span>
+    <div v-if='detail' style='padding: 30px'>
+        <h1 class='main-title'>{{ detail.title }}</h1>
+        <div class='desc'>
+            <el-button
+                type='primary'
+                size='mini'
+                @click='viewCommentDetail(detail.text, detail.subject)'
+            >内容分析
+            </el-button>
+            <span title='点击率'>
+                <svg-icon
+                    class-name='svg-icon'
+                    icon-class='svg-eye-open'
+                    style='display: inline'
+                />
+                {{ detail.view_count }}
+            </span>
+            <span>
+                {{ detail.intime }}
+            </span>
+            <span>
+                {{ detail.media_name }}
+            </span>
+            <span v-if='detail.keywords'>
+                <el-tag
+                    v-for='t in detail.keywords.split(&apos;,&apos;)'
+                    :key='t'
+                    type='info'
+                    style='margin: 0 5px 5px 0; cursor: pointer'
+                    effect='plain'
+                >{{ t }}</el-tag>
+            </span>
+        </div>
+        <div v-html='detail.html' />
     </div>
-    <div v-html="detail.html" />
-  </div>
 </template>
 
 <script>
-import request from "/@/utils/request";
+import request from '/@/utils/request'
 export default {
-  props: ["id"],
-  created() {
-    request.post("/news/detail/", { id: this.id }).then((res) => {
-      this.detail = res.data;
-    });
-  },
-  data() {
-    return {
-      detail: null,
-    };
-  },
-  methods: {
-    jsonify(text) {
-      return JSON.parse(text);
+    props: ['id'],
+    data() {
+        return {
+            detail: null
+        }
     },
-    viewCommentDetail(text, subject) {
-      localStorage.setItem("text", text.trim());
-      this.$router.push({ name: "AnalyseList", params: { subject } });
+    created() {
+        request.post('/news/detail/', { id: this.id }).then((res) => {
+            this.detail = res.data
+        })
     },
-  },
-};
+    methods: {
+        jsonify(text) {
+            return JSON.parse(text)
+        },
+        viewCommentDetail(text, subject) {
+            localStorage.setItem('text', text.trim())
+            this.$router.push({ name: 'AnalyseList', params: { subject } })
+        }
+    }
+}
 </script>
 
 <style lang="postcss" scoped>

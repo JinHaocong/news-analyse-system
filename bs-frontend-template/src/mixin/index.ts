@@ -1,4 +1,5 @@
 import { ComponentOptions } from 'vue'
+
 export default <ComponentOptions>{
     data() {
         return {
@@ -8,6 +9,6 @@ export default <ComponentOptions>{
     methods: {
         toPage(name: string): void {
             this.$router.push({ name })
-        },
+        }
     }
 }

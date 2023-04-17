@@ -2,25 +2,27 @@ import { ILocalStore } from '/@/type/utils/tools'
 import { IMenubarList } from '/@/type/store/layout'
 
 export function formatDateTime(inputTime: any) {
-    var date = new Date(inputTime);
-    var y = date.getFullYear();
-    var m: any = date.getMonth() + 1;
-    m = m < 10 ? ('0' + m) : m;
-    var d: any = date.getDate();
-    d = d < 10 ? ('0' + d) : d;
-    var h: any = date.getHours();
-    h = h < 10 ? ('0' + h) : h;
-    var minute: any = date.getMinutes();
-    var second: any = date.getSeconds();
-    minute = minute < 10 ? ('0' + minute) : minute;
-    second = second < 10 ? ('0' +
-        second) : second;
-    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    const date = new Date(inputTime)
+    const y = date.getFullYear()
+    let m: any = date.getMonth() + 1
+    m = m < 10 ? (`0${m}`) : m
+    let d: any = date.getDate()
+    d = d < 10 ? (`0${d}`) : d
+    let h: any = date.getHours()
+    h = h < 10 ? (`0${h}`) : h
+    let minute: any = date.getMinutes()
+    let second: any = date.getSeconds()
+    minute = minute < 10 ? (`0${minute}`) : minute
+    second = second < 10 ? (`0${
+        second}`) : second
+    return `${y}-${m}-${d} ${h}:${minute}:${second}`
 }
 
 export function parseTime(time: number): string {
     const format = '{y}-{m}-{d}'
-    if (('' + time).length === 10) { time = parseInt(time as unknown as string) * 1000 }
+    if ((`${time}`).length === 10) {
+        time = parseInt(time as unknown as string) * 1000
+    }
     const date = new Date(time)
     const formatObj: {
         [key: string]: number
@@ -36,23 +38,27 @@ export function parseTime(time: number): string {
     const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
         let value: any = formatObj[key]
         // Note: getDay() returns 0 on Sunday
-        if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+        if (key === 'a') {
+            return ['日', '一', '二', '三', '四', '五', '六'][value]
+        }
         if (result.length > 0 && value < 10) {
-            value = '0' + value
+            value = `0${value}`
         }
         return value || 0
     })
     return time_str
 }
+
 /**
  * 睡眠函数
- * @param time 
+ * @param time
  */
 export async function sleep(time: number): Promise<void> {
     await new Promise(resolve => {
         setTimeout(() => resolve, time)
     })
 }
+
 /**
  * 金额格式化
  * @param num 金额
@@ -60,17 +66,21 @@ export async function sleep(time: number): Promise<void> {
  */
 export function format(num: number | string, symbol = '￥'): string {
     if (Number.isNaN(Number(num))) return `${symbol}0.00`
-    return symbol + (Number(num).toFixed(2))
+    return symbol + (Number(num)
+        .toFixed(2))
         .replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
 }
+
 /**
  * 取消金额格式化
  * @param str 金额
  */
 export function unformat(str: string): number | string {
-    const s = str.substr(1).replace(/\,/g, '')
+    const s = str.substr(1)
+        .replace(/\,/g, '')
     return Number.isNaN(Number(s)) || Number(s) === 0 ? '' : Number(s)
 }
+
 /**
  * 表格合计行
  * @param str 金额
@@ -108,6 +118,7 @@ export function tableSummaries(param: { columns: any; data: any }): Array<string
 export function isInput(el: HTMLElement): boolean {
     return el.nodeName.toLocaleLowerCase() === 'input'
 }
+
 export function isTextarea(el: HTMLElement): boolean {
     return el.nodeName.toLocaleLowerCase() === 'textarea'
 }
@@ -124,6 +135,7 @@ export function setLocal(name: string, data: IObject<any>, pExpires = 1000 * 60 
     d.expires = pExpires
     localStorage.setItem(name, JSON.stringify(data))
 }
+
 /**
  * 判断localStorage有效期是否失效
  * @param name localStorage设置名称
@@ -135,6 +147,7 @@ export async function useLocal(name: string): Promise<ILocalStore> {
         resolve(local)
     })
 }
+
 /**
  * 获取localStorage对象并转成对应的类型
  * @param name localStorage设置名称
@@ -187,36 +200,39 @@ export function listToTree(data: Array<IMenubarList>, pid: string | number = 1, 
     })
     return d
 }
+
 /**
-  * 字符串首字母大写
-  * @param str 
-  * @returns 
-  */
+ * 字符串首字母大写
+ * @param str
+ * @returns
+ */
 export function firstUpperCase(str: string): string {
     return str.replace(/^\S/, s => s.toUpperCase())
 }
 
 /**
  * 加载store状态
- * @param modules 
- * @returns 
+ * @param modules
+ * @returns
  */
 export function loadStorePage(modules: IObject<any>): IObject<any> {
     const page: IObject<any> = {}
-    Object.keys(modules).forEach(key => {
-        const nameMatch = key.substr(2).replace('.ts', '')
-            .split('/')
-            .map(v => firstUpperCase(v))
-            .join('')
-        page[nameMatch] = modules[key].default
-    })
+    Object.keys(modules)
+        .forEach(key => {
+            const nameMatch = key.substr(2)
+                .replace('.ts', '')
+                .split('/')
+                .map(v => firstUpperCase(v))
+                .join('')
+            page[nameMatch] = modules[key].default
+        })
     return page
 }
 
 /**
  * 两次编码url
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 export function decode(url: string): string {
     return decodeURIComponent(decodeURIComponent(url))
@@ -224,8 +240,8 @@ export function decode(url: string): string {
 
 /**
  * 两次解码url
- * @param url 
- * @returns 
+ * @param url
+ * @returns
  */
 export function encode(url: string): string {
     return encodeURIComponent(encodeURIComponent(url))

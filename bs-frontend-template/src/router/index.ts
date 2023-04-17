@@ -104,7 +104,7 @@ export const allowRouter: Array<IMenubarList> = [
         path: '/Register',
         component: Components.Register,
         meta: { title: '注册', icon: 'el-icon-eleme', hidden: true }
-    },
+    }
 ]
 
 const router = createRouter({

@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia'
-import { login, loginParam, register, registerParam, getRouterList, getUser } from '/@/api/layout/index'
-import { ILayout, IMenubarStatus, ITagsList, IMenubarList, ISetting, IMenubar, IStatus, ITags, IUserInfo } from '/@/type/store/layout'
-import router from '/@/router/index'
-import { allowRouter } from '/@/router/index'
+import { getRouterList, getUser, login, loginParam, register, registerParam } from '/@/api/layout/index'
+import {
+    ILayout,
+    IMenubar,
+    IMenubarList,
+    IMenubarStatus,
+    ISetting,
+    IStatus,
+    ITags,
+    ITagsList,
+    IUserInfo
+} from '/@/type/store/layout'
+import router, { allowRouter } from '/@/router/index'
 import { generatorDynamicRouter } from '/@/router/asyncRouter'
-import { setLocal, getLocal, decode } from '/@/utils/tools'
+import { decode, getLocal, setLocal } from '/@/utils/tools'
 import { RouteLocationNormalizedLoaded } from 'vue-router'
 
 const setting = getLocal<ISetting>('setting')
@@ -18,12 +27,12 @@ export const useLayoutStore = defineStore({
             menuList: [],
             isPhone: document.body.offsetWidth < 768
         },
-        loginRequired: import.meta.env.VITE_LOGIN_REQUIRED === "on",
+        loginRequired: import.meta.env.VITE_LOGIN_REQUIRED === 'on',
         // 用户信息
         userInfo: {
             name: '',
             role: [],
-            isSuperuser: false,
+            isSuperuser: false
         },
         // 标签栏
         tags: {
@@ -130,7 +139,8 @@ export const useLayoutStore = defineStore({
         // 删除缓存页面
         removeCachedViews(obj: { name: string, index: number }): void {
             // 判断标签页是否还有该页面
-            if (this.tags.tagsList.map(v => v.name).includes(obj.name)) return
+            if (this.tags.tagsList.map(v => v.name)
+                .includes(obj.name)) return
             this.tags.cachedViews.splice(obj.index, 1)
         },
         logout(): void {
@@ -146,7 +156,8 @@ export const useLayoutStore = defineStore({
             this.menubar.menuList = data
         },
         concatAllowRoutes(): void {
-            allowRouter.reverse().forEach(v => this.menubar.menuList.unshift(v))
+            allowRouter.reverse()
+                .forEach(v => this.menubar.menuList.unshift(v))
         },
         // 修改主题
         changeTheme(num?: number): void {

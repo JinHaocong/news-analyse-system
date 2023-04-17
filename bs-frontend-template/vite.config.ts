@@ -1,10 +1,12 @@
-import { UserConfigExport, ConfigEnv, loadEnv } from 'vite'
+import { ConfigEnv, loadEnv, UserConfigExport } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { viteMockServe } from 'vite-plugin-mock'
 import viteSvgIcons from 'vite-plugin-svg-icons'
 
-const setAlias = (alias: [string, string][]) => alias.map(v => { return { find: v[0], replacement: path.resolve(__dirname, v[1]) } })
+const setAlias = (alias: [string, string][]) => alias.map(v => {
+    return { find: v[0], replacement: path.resolve(__dirname, v[1]) }
+})
 const proxy = (list: [string, string][]) => {
     const obj: IObject<any> = {}
     list.forEach((v) => {
@@ -36,7 +38,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         },
         build: {
             // sourcemap: true,
-            outDir: "../dist", // 直接放到上一级目录上
+            outDir: '../dist', // 直接放到上一级目录上
             manifest: false,
             rollupOptions: {
                 output: {
