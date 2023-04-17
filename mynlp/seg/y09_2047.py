@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import sys
 import gzip
 import marshal
+import sys
 from math import log
 
 from ..utils import frequency
+
+"""
+实现基于字符的生成式中文分词模型。
+模型使用了三阶马尔可夫模型，其中uni、bi和tri分别表示了一元、二元和三元频率统计的工具类，
+save和load方法是用于保存和加载训练好的模型，train方法是用于训练模型，而log_prob和tag方法则是用于使用训练好的模型进行分词的。
+其中，tag方法中的算法是基于维特比算法的。
+"""
 
 
 class CharacterBasedGenerativeModel(object):
@@ -58,7 +65,7 @@ class CharacterBasedGenerativeModel(object):
     def div(self, v1, v2):
         if v2 == 0:
             return 0
-        return float(v1)/v2
+        return float(v1) / v2
 
     def train(self, data):
         for sentence in data:
@@ -76,27 +83,27 @@ class CharacterBasedGenerativeModel(object):
         tl3 = 0.0
         samples = sorted(self.tri.samples(), key=lambda x: self.tri.get(x)[1])
         for now in samples:
-            c3 = self.div(self.tri.get(now)[1]-1, self.bi.get(now[:2])[1]-1)
-            c2 = self.div(self.bi.get(now[1:])[1]-1, self.uni.get(now[1])[1]-1)
-            c1 = self.div(self.uni.get(now[2])[1]-1, self.uni.getsum()-1)
+            c3 = self.div(self.tri.get(now)[1] - 1, self.bi.get(now[:2])[1] - 1)
+            c2 = self.div(self.bi.get(now[1:])[1] - 1, self.uni.get(now[1])[1] - 1)
+            c1 = self.div(self.uni.get(now[2])[1] - 1, self.uni.getsum() - 1)
             if c3 >= c1 and c3 >= c2:
                 tl3 += self.tri.get(now)[1]
             elif c2 >= c1 and c2 >= c3:
                 tl2 += self.tri.get(now)[1]
             elif c1 >= c2 and c1 >= c3:
                 tl1 += self.tri.get(now)[1]
-        self.l1 = self.div(tl1, tl1+tl2+tl3)
-        self.l2 = self.div(tl2, tl1+tl2+tl3)
-        self.l3 = self.div(tl3, tl1+tl2+tl3)
+        self.l1 = self.div(tl1, tl1 + tl2 + tl3)
+        self.l2 = self.div(tl2, tl1 + tl2 + tl3)
+        self.l3 = self.div(tl3, tl1 + tl2 + tl3)
 
     def log_prob(self, s1, s2, s3):
-        uni = self.l1*self.uni.freq(s3)
-        bi = self.div(self.l2*self.bi.get((s2, s3))[1], self.uni.get(s2)[1])
-        tri = self.div(self.l3*self.tri.get((s1, s2, s3))[1],
+        uni = self.l1 * self.uni.freq(s3)
+        bi = self.div(self.l2 * self.bi.get((s2, s3))[1], self.uni.get(s2)[1])
+        tri = self.div(self.l3 * self.tri.get((s1, s2, s3))[1],
                        self.bi.get((s1, s2))[1])
-        if uni+bi+tri == 0:
+        if uni + bi + tri == 0:
             return float('-inf')
-        return log(uni+bi+tri)
+        return log(uni + bi + tri)
 
     def tag(self, data):
         now = [((('', 'BOS'), ('', 'BOS')), 0.0, [])]
@@ -110,16 +117,16 @@ class CharacterBasedGenerativeModel(object):
             if not_found:
                 for s in self.status:
                     for pre in now:
-                        stage[(pre[0][1], (w, s))] = (pre[1], pre[2]+[s])
+                        stage[(pre[0][1], (w, s))] = (pre[1], pre[2] + [s])
                 now = list(map(lambda x: (x[0], x[1][0], x[1][1]),
                                stage.items()))
                 continue
             for s in self.status:
                 for pre in now:
-                    p = pre[1]+self.log_prob(pre[0][0], pre[0][1], (w, s))
+                    p = pre[1] + self.log_prob(pre[0][0], pre[0][1], (w, s))
                     if (not (pre[0][1],
                              (w, s)) in stage) or p > stage[(pre[0][1],
-                                                            (w, s))][0]:
-                        stage[(pre[0][1], (w, s))] = (p, pre[2]+[s])
+                                                             (w, s))][0]:
+                        stage[(pre[0][1], (w, s))] = (p, pre[2] + [s])
             now = list(map(lambda x: (x[0], x[1][0], x[1][1]), stage.items()))
         return zip(data, max(now, key=lambda x: x[1])[2])

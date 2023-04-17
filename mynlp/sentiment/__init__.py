@@ -1,12 +1,21 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import os
 import codecs
+import os
 
-from .. import normal
-from .. import seg
-from ..classification.bayes import Bayes
+from mynlp import seg, normal
+from mynlp.classification.bayes import Bayes
+
+"""
+这段代码实现了一个情感分析模型的训练和使用，通过朴素贝叶斯算法对文本进行分类，判断文本的情感倾向是“正面”还是“负面”。
+具体来说，这段代码实现了以下功能：
+
+读取文本文件，将文件中的数据进行训练，得到分类器。
+将分类器保存到本地文件中。
+从本地文件中加载分类器。
+对给定的文本进行情感分类，返回分类结果。
+"""
 
 data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                          'sentiment.marshal')
@@ -40,7 +49,7 @@ class Sentiment(object):
         ret, prob = self.classifier.classify(self.handle(sent))
         if ret == 'pos':
             return prob
-        return 1-prob
+        return 1 - prob
 
 
 classifier = Sentiment()
@@ -65,3 +74,10 @@ def load(fname, iszip=True):
 
 def classify(sent):
     return classifier.classify(sent)
+
+
+# 训练模型
+if __name__ == '__main__':
+    train('neg.txt', 'pos.txt')
+    save('sentiment.marshal')
+    classify('不开心')
