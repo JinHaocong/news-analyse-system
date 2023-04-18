@@ -1,43 +1,55 @@
+import json
+import time
+
 import requests
 from django.db import models
 
 from mynlp import NLP
 
 
-def mean(arr):
-    return sum(arr) / len(arr)
-
-
-def bd_sentiment(text, result):
+def bai_du_ai(text, result):
     try:
-        t = requests.post(
-            "https://ai.baidu.com/aidemo",
-            data=dict(apiType="nlp", type="sentimentClassify", t1=text),
-            headers={
-                "Referer": "https://ai.baidu.com/tech/nlp_apply/sentiment_classify"
-            },
-        ).json()["data"]["items"][0]
-        result = [t["positive_prob"], t["negative_prob"]]
-    except Exception:
-        pass
-    return result
-
-
-def bs_sentiment(text, result):
-    try:
-        max_length = 500
+        max_length = 1500
+        text = text.replace(' ', '').replace('\n', '').replace('\t', '').replace("\u3000", '')
+        url = "https://aip.baidubce.com/rpc/2.0/nlp/v1/sentiment_classify?access_token=24.5e32b04f49903cd9e520c7a2be477c78.2592000.1684409657.282335-32554078&charset=UTF-8"
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
         texts = [text[i: i + max_length] for i in range(0, len(text), max_length)]
-        probs = []
-        for i in texts:
-            result = requests.post(
-                "http://static.bosonnlp.com/analysis/sentiment?analysisType=weibo",
-                data=dict(data=i),
-            ).json()
-            probs.append(result[0])
-        result = [mean([i[0] for i in probs]), mean([i[1] for i in probs])]
-    except:
-        pass
+        payload = json.dumps({
+            "text": texts[0]
+        })
+        response = requests.request("POST", url, headers=headers, data=payload).json()
+        result[0] = response['items'][0]['positive_prob']
+        result[1] = response['items'][0]['negative_prob']
+        save_file(text, result)
+        print('baidu_ai;', result)
+        print('response;', response)
+    except Exception as error:
+        print('bai_du_ai函数报错', error)
     return result
+
+
+def save_file(text, prop):
+    pos = open('pos.txt', 'a', encoding='utf-8')
+    neg = open('neg.txt', 'a', encoding='utf-8')
+    if prop[0] > prop[1]:
+        # 定义为积极情感
+        pos.write(text)
+        pos.write('\n')
+    else:
+        neg.write(text)
+        neg.write('\n')
+    pos.close()
+    neg.close()
+
+
+def get_all_news():
+    news_list = News.objects.all()
+    for i in news_list:
+        bai_du_ai(i.text, [0, 0])
+        time.sleep(0.4)
 
 
 class News(models.Model):
@@ -58,14 +70,17 @@ class News(models.Model):
 
     @classmethod
     def sentiment(cls, text):
+        # get_all_news()
         # 情感分析的分析结果
         sentiments = NLP(text).sentiments
         result = [sentiments] * 2
+        # 积极情感 > 0.5
         if sentiments > 0.5:
             result[1] = 1 - sentiments
         else:
             result[0] = 1 - sentiments
-        return bs_sentiment(text, result)
+        return bai_du_ai(text, result)
+        # return result
 
     class Meta:
         db_table = "news"

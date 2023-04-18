@@ -41,9 +41,7 @@ class Bayes(object):
     def save(self, fname, iszip=True):
         """将训练好的模型保存到文件中"""
         print('save')
-        d = {}
-        d['total'] = self.total
-        d['d'] = {}
+        d = {'total': self.total, 'd': {}}
         for k, v in self.d.items():
             d['d'][k] = v.__dict__
         if sys.version_info[0] == 3:
@@ -103,5 +101,5 @@ class Bayes(object):
                 now = 0
             if now > prob:
                 ret, prob = k, now
-        print(ret, prob)
+        print('my_model;', ret, prob)
         return ret, prob
