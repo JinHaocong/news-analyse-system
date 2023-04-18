@@ -5,6 +5,8 @@
 <script lang='ts' setup>
 import { onMounted, ref, watch } from 'vue'
 import request from '/@/utils/request'
+import '/@/utils/echarts.min'
+import '/@/utils/echarts-wordcloud.min'
 
 const props = defineProps(['api', 'option'])
 const el = ref(null)

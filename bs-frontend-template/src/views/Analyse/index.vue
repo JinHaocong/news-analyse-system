@@ -79,7 +79,7 @@ export default {
         return {
             tp,
             chans: ['国内', '国际', '体育', '娱乐', '军事', '科技', '财经', '股市', '美股', '社会'],
-            currentTab: 0,
+            currentTab: '0',
             text: '',
             pie: null,
             wordcloud: null,

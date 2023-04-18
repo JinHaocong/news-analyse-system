@@ -3,15 +3,16 @@
 from . import good_turing
 
 """
-定义了三个概率计算的类：BaseProb、NormalProb、AddOneProb、GoodTuringProb。
+用于计算概率相关的数值。
+其中，BaseProb 是所有类的基类，
+NormalProb 和 AddOneProb 类分别实现了普通概率计算和加一平滑的概率计算，
+GoodTuringProb 类使用 Good-Turing 平滑算法来计算概率。
 
-这些类用于处理概率相关的计算，每个类都有一个 add 方法，用于添加一个 key 和对应的 value（即这个 key 出现的次数），
-另外还有一些方法可以获取 key 对应的出现次数或概率等信息。
-
-其中，NormalProb 和 AddOneProb 类分别实现了普通的概率计算和加一平滑的概率计算。
-    GoodTuringProb 类使用了 Good-Turing 平滑算法来计算概率，
-        需要在处理概率前先调用 add 方法添加所有的 key 和对应的 value，然后才能使用 get 方法来获取 key 对应的概率。
-    Good-Turing 平滑算法可以处理未出现过的 key，避免了概率为零的情况。
+这些类都有一个 add 方法，用于添加一个 key 和对应的 value（即这个 key 出现的次数），另外还有一些方法可以获取 key 对应的出现次数或概率等信息。
+其中，NormalProb 和 AddOneProb 类的实现比较简单，直接对每个 key 的出现次数进行统计，并在需要计算概率时除以总的样本数即可。
+GoodTuringProb 类的实现稍微复杂一些，它需要先对所有 key 的出现次数进行处理，再计算概率。
+Good-Turing 平滑算法可以处理未出现过的 key，避免了概率为零的情况。
+在处理概率前需要先调用 add 方法添加所有的 key 和对应的 value，然后才能使用 get 方法来获取 key 对应的概率。
 """
 
 
