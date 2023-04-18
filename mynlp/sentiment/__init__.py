@@ -78,6 +78,7 @@ def classify(sent):
 
 # 训练模型
 if __name__ == '__main__':
-    train('neg.txt', 'pos.txt')
-    save('sentiment.marshal')
-    classify('不开心')
+    # train('neg.txt', 'pos.txt')
+    # save('sentiment.marshal')
+    classify(
+        '我要杀了你')

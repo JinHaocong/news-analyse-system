@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 
 import codecs
 
-from .y09_2047 import CharacterBasedGenerativeModel
-from ..utils.tnt import TnT
+from mynlp.seg.y09_2047 import CharacterBasedGenerativeModel
+from mynlp.utils.tnt import TnT
 
 """
 定义 Seg 的类，用于中文分词。该类具有以下方法：

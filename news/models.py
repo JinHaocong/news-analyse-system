@@ -1,5 +1,6 @@
 import requests
 from django.db import models
+
 from mynlp import NLP
 
 
@@ -25,7 +26,7 @@ def bd_sentiment(text, result):
 def bs_sentiment(text, result):
     try:
         max_length = 500
-        texts = [text[i : i + max_length] for i in range(0, len(text), max_length)]
+        texts = [text[i: i + max_length] for i in range(0, len(text), max_length)]
         probs = []
         for i in texts:
             result = requests.post(

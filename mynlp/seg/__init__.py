@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import os
 import re
 
-from . import seg as TnTseg
+from mynlp.seg import seg as TnTseg
 
 """
 中文分词的功能，采用的是基于隐马尔可夫模型（Hidden Markov Model，简称 HMM）的分词算法。主要涉及的函数有：

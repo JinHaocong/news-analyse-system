@@ -57,7 +57,6 @@ class Bayes(object):
 
     def load(self, fname, iszip=True):
         """从文件中加载训练好的模型"""
-        print('load')
         if sys.version_info[0] == 3:
             fname = fname + '.3'
         if not iszip:
