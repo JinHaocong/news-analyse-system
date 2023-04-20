@@ -122,3 +122,6 @@ db.sqlite3
 dist
 positive1.txt
 negative1.txt
+./mynlp/sentiment/model.h5
+./mynlp/sentiment/positive.txt
+./mynlp/sentiment/negative.txt
