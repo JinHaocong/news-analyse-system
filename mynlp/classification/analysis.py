@@ -1,6 +1,7 @@
 import pickle
 
 import numpy as np
+import pandas as pd
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 from tensorflow.python.keras import Sequential
@@ -36,7 +37,7 @@ class SentimentAnalysis:
         self.kernel_size = 10  # 卷积核的大小
         self.pool_size = 10  # 池化层的大小
         self.dense_units = 500  # 全连接层的神经元个数
-        self.dropout_rate = 0.7  # Dropout 层的比例
+        self.dropout_rate = 0.5  # Dropout 层的比例
         self.batch_size = 512  # 批处理大小
         self.epochs = 10  # 训练的轮数
         self.model_path = model_path  # 模型保存的路径
@@ -80,7 +81,7 @@ class SentimentAnalysis:
         np.random.shuffle(indices)
         data = data[indices]
         labels = labels[indices]
-        num_validation_samples = int(0.2 * data.shape[0])
+        num_validation_samples = int(0.3 * data.shape[0])
 
         x_train = data[:-num_validation_samples]
         y_train = labels[:-num_validation_samples]
@@ -100,8 +101,20 @@ class SentimentAnalysis:
         self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
         # 训练模型
-        self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=self.epochs,
-                       batch_size=self.batch_size)
+        history = self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=self.epochs,
+                                 batch_size=self.batch_size)
+        # verbose 是否显示日志信息，0不显示，1显示进度条，2不显示进度条
+        loss, accuracy = self.model.evaluate(x_train, y_train, verbose=1)
+        print("训练集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
+        loss, accuracy = self.model.evaluate(x_train, y_test, verbose=1)
+        print("测试集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
+
+        # 绘制训练曲线
+        from matplotlib import pyplot as plt
+        pd.DataFrame(history.history).plot(figsize=(8, 5))
+        plt.grid(True)
+        plt.gca().set_ylim(0, 1)  # set the vertical range to [0-1]
+        plt.show()
 
         # 保存模型
         self.save_model()
