@@ -28,21 +28,21 @@ from tensorflow.python.keras.models import load_model
 
 
 class SentimentAnalysis:
-    def __init__(self, num_words=40000, embedding_dim=64, max_length=4000, filters=64, kernel_size=10, pool_size=10,
-                 dense_units=500, dropout_rate=0.7, batch_size=512, epochs=10, model_path='model.h5',
-                 tokenizer_path='tokenizer.pickle'):
-        self.num_words = num_words  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
-        self.embedding_dim = embedding_dim  # 词嵌入的维度
-        self.max_length = max_length  # 输入序列的最大长度
-        self.filters = filters  # 卷积层的滤波器个数
-        self.kernel_size = kernel_size  # 卷积核的大小
-        self.pool_size = pool_size  # 池化层的大小
-        self.dense_units = dense_units  # 全连接层的神经元个数
-        self.dropout_rate = dropout_rate  # Dropout 层的比例
-        self.batch_size = batch_size  # 批处理大小
-        self.epochs = epochs  # 训练的轮数
+    def __init__(self, model_path, tokenizer_path, positive_path, negative_path, ):
+        self.num_words = 40000  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
+        self.embedding_dim = 64  # 词嵌入的维度
+        self.max_length = 4000  # 输入序列的最大长度
+        self.filters = 64  # 卷积层的滤波器个数
+        self.kernel_size = 10  # 卷积核的大小
+        self.pool_size = 10  # 池化层的大小
+        self.dense_units = 500  # 全连接层的神经元个数
+        self.dropout_rate = 0.7  # Dropout 层的比例
+        self.batch_size = 512  # 批处理大小
+        self.epochs = 10  # 训练的轮数
         self.model_path = model_path  # 模型保存的路径
         self.tokenizer_path = tokenizer_path  # Tokenizer 对象保存的路径。
+        self.positive_path = positive_path
+        self.negative_path = negative_path
         self.tokenizer = None
         self.model = None
 
@@ -56,9 +56,9 @@ class SentimentAnalysis:
     def train(self):
         print('train')
         # 导入数据
-        with open('./positive.txt', 'r', encoding='utf-8') as f:
+        with open(self.positive_path, 'r', encoding='utf-8') as f:
             positive_data = f.readlines()
-        with open('./negative.txt', 'r', encoding='utf-8') as f:
+        with open(self.negative_path, 'r', encoding='utf-8') as f:
             negative_data = f.readlines()
 
         # 将标签转换为0和1
@@ -116,13 +116,11 @@ class SentimentAnalysis:
         with open(self.tokenizer_path, 'wb') as handle:
             pickle.dump(self.tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-    def load_model(self, model_path='model.h5'):
-        if not model_path:
-            model_path = self.model_path
-        self.model = load_model(model_path)
+    def load_model(self):
+        self.model = load_model(self.model_path)
 
-    def load_tokenizer(self, tokenizer_path='tokenizer.pickle'):
-        with open(tokenizer_path, 'rb') as handle:
+    def load_tokenizer(self):
+        with open(self.tokenizer_path, 'rb') as handle:
             self.tokenizer = pickle.load(handle)
 
     def predict(self, texts):

@@ -18,14 +18,11 @@ from mynlp.classification.bayes import Bayes
 对给定的文本进行情感分类，返回分类结果。
 """
 
-data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                         'sentiment.marshal')
-
-model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                          'model.h5')
-
-tokenizer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                              'tokenizer.pickle')
+data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sentiment.marshal')
+model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model.h5')
+tokenizer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tokenizer.pickle')
+positive_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'positive.txt')
+negative_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'negative.txt')
 
 
 class Sentiment(object):
@@ -83,11 +80,7 @@ def classify(sent):
     return classifier.classify(sent)
 
 
-model = SentimentAnalysis(model_path=model_path, tokenizer_path=tokenizer_path)
-
-
-# model.load_model(model_path)
-# model.load_tokenizer(tokenizer_path)
+model = SentimentAnalysis(model_path, tokenizer_path, positive_path, negative_path)
 
 
 def predict(text):
