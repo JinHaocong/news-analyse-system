@@ -120,3 +120,8 @@ node_modules
 db.sqlite3
 .gitignore
 dist
+positive1.txt
+negative1.txt
+./mynlp/sentiment/model.h5
+./mynlp/sentiment/positive.txt
+./mynlp/sentiment/negative.txt
