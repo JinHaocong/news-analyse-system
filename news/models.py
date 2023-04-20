@@ -74,14 +74,23 @@ class News(models.Model):
         # 情感分析的分析结果
         sentiments = NLP(text).sentiments
         sentiments_model = NLP(text).sentiments_model
+        print(sentiments, 'sentiments')
+        print(sentiments_model, 'sentiments_model')
         result = [sentiments] * 2
+        sentiments_model_result = [sentiments_model] * 2
         # 积极情感 > 0.5
         if sentiments > 0.5:
             result[1] = 1 - sentiments
         else:
             result[0] = 1 - sentiments
-        return bai_du_ai(text, result)
+            
+        if sentiments_model > 0.5:
+            sentiments_model_result[1] = 1 - sentiments_model
+        else:
+            sentiments_model_result[0] = 1 - sentiments_model
+        # return bai_du_ai(text, result)
         # return result
+        return sentiments_model_result
 
     class Meta:
         db_table = "news"

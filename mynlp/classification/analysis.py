@@ -130,7 +130,7 @@ class SentimentAnalysis:
             raise ValueError("Model not found, please load or train a model")
         test_sequences = self.tokenizer.texts_to_sequences([texts])
         test_data = pad_sequences(test_sequences, maxlen=self.max_length)
-        result = self.model.predict(test_data)
+        result = np.asscalar(np.float32(self.model.predict(test_data)[0][0]))
 
         # 判断预测结果
         print(result, 'result')
