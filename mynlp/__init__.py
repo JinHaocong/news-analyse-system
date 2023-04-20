@@ -55,6 +55,10 @@ class NLP(object):
         return sentiment.classify(self.doc)
 
     @property
+    def sentiments_model(self):
+        return sentiment.predict(self.doc)
+
+    @property
     def tags(self):
         words = self.words
         tags = tag.tag(words)

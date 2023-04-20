@@ -32,8 +32,8 @@ def bai_du_ai(text, result):
 
 
 def save_file(text, prop):
-    pos = open('pos.txt', 'a', encoding='utf-8')
-    neg = open('neg.txt', 'a', encoding='utf-8')
+    pos = open('positive1.txt', 'a', encoding='utf-8')
+    neg = open('negative1.txt', 'a', encoding='utf-8')
     if prop[0] > prop[1]:
         # 定义为积极情感
         pos.write(text)
@@ -73,6 +73,7 @@ class News(models.Model):
         # get_all_news()
         # 情感分析的分析结果
         sentiments = NLP(text).sentiments
+        sentiments_model = NLP(text).sentiments_model
         result = [sentiments] * 2
         # 积极情感 > 0.5
         if sentiments > 0.5:
