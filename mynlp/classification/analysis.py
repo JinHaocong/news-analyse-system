@@ -26,8 +26,8 @@ from tensorflow.python.keras.models import load_model
 
 class SentimentAnalysis:
     def __init__(self, model_path, tokenizer_path, positive_path, negative_path, ):
-        self.num_words = 60000  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
-        self.embedding_dim = 64  # 词嵌入的维度
+        self.num_words = 80000  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
+        self.embedding_dim = 128  # 词嵌入的维度
         self.max_length = 400  # 输入序列的最大长度
         self.filters = 64  # 卷积层的滤波器个数
         self.kernel_size = 10  # 卷积核的大小
