@@ -28,7 +28,7 @@ from tensorflow.python.keras.models import load_model
 
 
 class SentimentAnalysis:
-    def __init__(self, num_words=40000, embedding_dim=64, max_length=3000, filters=64, kernel_size=10, pool_size=10,
+    def __init__(self, num_words=40000, embedding_dim=64, max_length=4000, filters=64, kernel_size=10, pool_size=10,
                  dense_units=500, dropout_rate=0.7, batch_size=512, epochs=10, model_path='model.h5',
                  tokenizer_path='tokenizer.pickle'):
         self.num_words = num_words  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
