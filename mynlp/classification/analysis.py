@@ -131,11 +131,4 @@ class SentimentAnalysis:
         test_sequences = self.tokenizer.texts_to_sequences([texts])
         test_data = pad_sequences(test_sequences, maxlen=self.max_length)
         result = np.asscalar(np.float32(self.model.predict(test_data)[0][0]))
-
-        # 判断预测结果
-        print(result, 'result')
-        if result > 0.5:
-            print("该文本的情感倾向为积极")
-        else:
-            print("该文本的情感倾向为消极")
         return result
