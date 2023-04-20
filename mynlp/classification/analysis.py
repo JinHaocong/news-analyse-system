@@ -34,7 +34,7 @@ class SentimentAnalysis:
         self.pool_size = 10  # 池化层的大小
         self.dense_units = 500  # 全连接层的神经元个数
         self.dropout_rate = 0.5  # Dropout 层的比例
-        self.batch_size = 512  # 批处理大小
+        self.batch_size = 64  # 批处理大小
         self.epochs = 10  # 训练的轮数
         self.model_path = model_path  # 模型保存的路径
         self.tokenizer_path = tokenizer_path  # Tokenizer 对象保存的路径。
