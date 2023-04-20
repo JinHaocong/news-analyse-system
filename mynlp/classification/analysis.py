@@ -4,14 +4,10 @@ import numpy as np
 import pandas as pd
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
+from keras.utils import plot_model
 from tensorflow.python.keras import Sequential
 from tensorflow.python.keras.layers import Embedding, Conv1D, MaxPooling1D, Dropout, Flatten, Dense
 from tensorflow.python.keras.models import load_model
-
-# from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, Embedding
-# from tensorflow.keras.models import Sequential, load_model
-# from tensorflow.keras.preprocessing.sequence import pad_sequences
-# from tensorflow.keras.preprocessing.text import Tokenizer
 
 """
 要提高模型准确率，您可以尝试调整以下参数：
@@ -99,6 +95,10 @@ class SentimentAnalysis:
         self.model.add(Dropout(self.dropout_rate))
         self.model.add(Dense(1, activation='sigmoid'))
         self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        self.model.summary()
+
+        # 绘制模型结构到文件
+        plot_model(self.model, to_file='model.jpg')
 
         # 训练模型
         history = self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=self.epochs,
@@ -106,7 +106,7 @@ class SentimentAnalysis:
         # verbose 是否显示日志信息，0不显示，1显示进度条，2不显示进度条
         loss, accuracy = self.model.evaluate(x_train, y_train, verbose=1)
         print("训练集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
-        loss, accuracy = self.model.evaluate(x_train, y_test, verbose=1)
+        loss, accuracy = self.model.evaluate(x_test, y_test, verbose=1)
         print("测试集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
 
         # 绘制训练曲线
