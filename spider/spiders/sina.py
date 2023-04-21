@@ -30,8 +30,8 @@ class SinaSpider(scrapy.Spider):
     api = "https://feed.mix.sina.com.cn/api/roll/get?pageid=153&lid={lid}&k=&num=50&page={page}&r={r}"
 
     def start_requests(self):
-        # 爬取五十页新闻 新浪只提供50页
-        page_total = 50
+        # 爬取十页新闻 新浪最多供50页
+        page_total = 10
         for lid, subject in self.channels.items():
             r = random()
             for page in range(1, page_total + 1):

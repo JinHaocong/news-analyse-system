@@ -30,6 +30,20 @@
                         @change='search'
                     />
                 </el-form-item>
+                <el-form-item label='类别'>
+                    <el-select
+                        v-model='commentForm._subject__icontains'
+                        clearable
+                        @change='search'
+                    >
+                        <el-option
+                            v-for='item in subjecrList'
+                            :key='item.value'
+                            :label='item.label'
+                            :value='item.label'
+                        />
+                    </el-select>
+                </el-form-item>
                 <el-form-item>
                     <el-button type='primary' @click='search'>搜索</el-button>
                 </el-form-item>
@@ -162,7 +176,19 @@ export default {
                 page: 1,
                 pagesize: 20
             },
-            centerDialogVisible: false
+            centerDialogVisible: false,
+            subjecrList: [
+                { value: '0', label: '国内' },
+                { value: '1', label: '国际' },
+                { value: '2', label: '社会' },
+                { value: '3', label: '体育' },
+                { value: '4', label: '娱乐' },
+                { value: '5', label: '军事' },
+                { value: '6', label: '科技' },
+                { value: '7', label: '财经' },
+                { value: '8', label: '股市' },
+                { value: '9', label: '美股' }
+            ]
         }
     },
     beforeMount() {
