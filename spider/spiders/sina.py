@@ -47,22 +47,14 @@ class SinaSpider(scrapy.Spider):
             print('-' * 20)
             pass
         else:
-            # start_ts = result["start"]
-            # if datetime.fromtimestamp(start_ts).strftime(
-            #         "%Y-%m-%d"
-            # ) == datetime.now().strftime("%Y-%m-%d"):
             # 列表
             for item in result["data"]:
-                meta["item"] = item
-                yield scrapy.Request(
-                    item["url"], meta=meta, callback=self.parse_page
-                )
-            # # 翻页
-            # page = meta["page"] + 1
-            # lid = meta["lid"]
-            # url = self.api.format(lid=lid, page=page)
-            # print(url, 'urlllllllllllll')
-            # yield scrapy.Request(url)
+                intime = int(item["intime"])
+                if datetime.fromtimestamp(intime).strftime("%Y-%m-%d") == datetime.now().strftime("%Y-%m-%d"):
+                    meta["item"] = item
+                    yield scrapy.Request(
+                        item["url"], meta=meta, callback=self.parse_page
+                    )
 
     @staticmethod
     def parse_page(response):
