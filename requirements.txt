@@ -10,7 +10,7 @@ bs4==0.0.1
 certifi==2021.10.8
 charset-normalizer==2.0.12
 click==8.0.3
-cssselect==1.1.0
+cssselect==1.2.0
 Django
 django-cors-headers==3.11.0
 django-simpleui==2022.2
@@ -42,7 +42,6 @@ urllib3==1.26.8
 w3lib==1.22.0
 websockets==10.1
 zipp==3.7.0
-
 numpy
 tensorflow
 keras

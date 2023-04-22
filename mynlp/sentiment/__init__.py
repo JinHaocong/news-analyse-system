@@ -23,6 +23,7 @@ model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model.h5'
 tokenizer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tokenizer.pickle')
 positive_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'positive.txt')
 negative_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'negative.txt')
+stop_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'stopwords.txt')
 
 
 class Sentiment(object):
@@ -80,7 +81,7 @@ def classify(sent):
     return classifier.classify(sent)
 
 
-model = SentimentAnalysis(model_path, tokenizer_path, positive_path, negative_path)
+model = SentimentAnalysis(model_path, tokenizer_path, positive_path, negative_path, stop_path)
 
 
 def predict(text):

@@ -23,6 +23,8 @@ def bai_du_ai(text, result):
         response = requests.request("POST", url, headers=headers, data=payload).json()
         result[0] = response['items'][0]['positive_prob']
         result[1] = response['items'][0]['negative_prob']
+        print(response)
+        print(result)
         # save_file(text, result)
     except Exception as error:
         print('bai_du_ai函数报错', error)
