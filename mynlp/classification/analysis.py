@@ -1,13 +1,14 @@
 import pickle
 
+import jieba
 import numpy as np
 import pandas as pd
+from keras import Sequential
+from keras.layers import Embedding, Conv1D, MaxPooling1D, Dropout, Flatten, Dense
+from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 from keras.utils import plot_model
-from tensorflow.python.keras import Sequential
-from tensorflow.python.keras.layers import Embedding, Conv1D, MaxPooling1D, Dropout, Flatten, Dense
-from tensorflow.python.keras.models import load_model
 
 """
 要提高模型准确率，您可以尝试调整以下参数：
@@ -25,23 +26,25 @@ from tensorflow.python.keras.models import load_model
 
 
 class SentimentAnalysis:
-    def __init__(self, model_path, tokenizer_path, positive_path, negative_path, ):
-        self.num_words = 80000  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
+    def __init__(self, model_path, tokenizer_path, positive_path, negative_path, stop_path):
+        self.num_words = 5000  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
         self.embedding_dim = 200  # 词嵌入的维度
-        self.max_length = 400  # 输入序列的最大长度
+        self.max_length = 300  # 输入序列的最大长度
         self.filters = 64  # 卷积层的滤波器个数
         self.kernel_size = 10  # 卷积核的大小
         self.pool_size = 10  # 池化层的大小
         self.dense_units = 500  # 全连接层的神经元个数
         self.dropout_rate = 0.5  # Dropout 层的比例
         self.batch_size = 64  # 批处理大小
-        self.epochs = 10  # 训练的轮数
+        self.epochs = 50  # 训练的轮数
         self.model_path = model_path  # 模型保存的路径
         self.tokenizer_path = tokenizer_path  # Tokenizer 对象保存的路径。
         self.positive_path = positive_path
         self.negative_path = negative_path
+        self.stop_path = stop_path
         self.tokenizer = None
         self.model = None
+        self.stop_words = set()
 
         # 尝试加载模型
         try:
@@ -50,15 +53,33 @@ class SentimentAnalysis:
         except Exception as error:
             print("初始化；没有找到模型文件，请训练", error)
 
+        with open(self.stop_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                self.stop_words.add(line.strip())
+
     def train(self):
         print('train')
+        positive_data = []
+        negative_data = []
         # 导入数据
         with open(self.positive_path, 'r', encoding='utf-8') as f:
-            positive_data = f.readlines()
+            pos_data = f.readlines()
         with open(self.negative_path, 'r', encoding='utf-8') as f:
-            negative_data = f.readlines()
+            neg_data = f.readlines()
 
-        # 将标签转换为0和1
+        # 去停用词
+        for line in pos_data:
+            words = jieba.lcut(line.strip())
+            words = [word for word in words if word not in self.stop_words]
+            text = ' '.join(words)
+            positive_data.append(text)
+
+        for line in neg_data:
+            words = jieba.lcut(line.strip())
+            words = [word for word in words if word not in self.stop_words]
+            text = ' '.join(words)
+            negative_data.append(text)
+            # 将标签转换为0和1
         labels = np.concatenate((np.ones(len(positive_data)), np.zeros(len(negative_data))))
 
         # 将文本合并并进行标记化
@@ -68,11 +89,9 @@ class SentimentAnalysis:
         sequences = self.tokenizer.texts_to_sequences(texts)
 
         # 将序列填充到最大长度
-        if not self.max_length:
-            self.max_length = max([len(s) for s in sequences])
         data = pad_sequences(sequences, maxlen=self.max_length)
 
-        # 划分训练和测试数据集
+        # 打乱数据并划分训练和测试数据集
         indices = np.arange(data.shape[0])
         np.random.shuffle(indices)
         data = data[indices]
@@ -139,6 +158,9 @@ class SentimentAnalysis:
     def predict(self, texts):
         if self.model is None:
             raise ValueError("Model not found, please load or train a model")
+        words = jieba.lcut(texts.strip())
+        words = [word for word in words if word not in self.stop_words]
+        texts = ' '.join(words)
         test_sequences = self.tokenizer.texts_to_sequences([texts])
         test_data = pad_sequences(test_sequences, maxlen=self.max_length)
         result = np.asscalar(np.float32(self.model.predict(test_data)[0][0]))
