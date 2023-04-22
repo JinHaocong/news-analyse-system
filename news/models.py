@@ -23,9 +23,7 @@ def bai_du_ai(text, result):
         response = requests.request("POST", url, headers=headers, data=payload).json()
         result[0] = response['items'][0]['positive_prob']
         result[1] = response['items'][0]['negative_prob']
-        save_file(text, result)
-        print('baidu_ai;', result)
-        print('response;', response)
+        # save_file(text, result)
     except Exception as error:
         print('bai_du_ai函数报错', error)
     return result
@@ -74,8 +72,10 @@ class News(models.Model):
         # 情感分析的分析结果
         sentiments = NLP(text).sentiments
         sentiments_model = NLP(text).sentiments_model
+        baidu_result = bai_du_ai(text, [0, 0])
         print(sentiments, 'sentiments')
         print(sentiments_model, 'sentiments_model')
+        print(baidu_result, 'baidu_result')
         result = [sentiments] * 2
         sentiments_model_result = [sentiments_model] * 2
 
