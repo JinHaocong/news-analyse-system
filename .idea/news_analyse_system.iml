@@ -19,6 +19,9 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="echarts" level="application" />
+    <orderEntry type="library" name="china" level="application" />
+    <orderEntry type="library" name="echarts-wordcloud" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="versionSpecifier" value="不指定版本" />

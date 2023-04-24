@@ -8,5 +8,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="china" level="application" />
+    <orderEntry type="library" name="echarts-wordcloud" level="application" />
+    <orderEntry type="library" name="echarts" level="application" />
   </component>
 </module>

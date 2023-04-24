@@ -8,6 +8,7 @@ from mynlp import NLP
 
 
 def bai_du_ai(text, result):
+    """调用百度AI分析情感接口"""
     try:
         max_length = 1500
         text = text.replace(' ', '').replace('\n', '').replace('\t', '').replace("\u3000", '')

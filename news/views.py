@@ -77,7 +77,8 @@ def pie(request):
     data = request.json
     text = data.get("text")
     try:
-        prob = [round(i, 2) for i in News.sentiment(text)]
+        # prob = [round(i, 2) for i in News.sentiment(text)]
+        prob = News.sentiment(text)
     except Exception as error:
         print(error)
         prob = [0.5, 0.5]

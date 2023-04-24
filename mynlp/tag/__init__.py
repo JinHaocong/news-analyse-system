@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import codecs
 import os
 
-from ..utils.tnt import TnT
+from mynlp.utils.tnt import TnT
 
 """
 这段代码定义了一些函数和变量，用于基于TnT算法进行中文分词和词性标注。
@@ -18,8 +18,7 @@ from ..utils.tnt import TnT
 该模块的目的是为了方便使用TnT算法对中文文本进行分词和词性标注，提供了训练、保存、加载和标注等功能。
 """
 
-data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                         'tag.marshal')
+data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tag.marshal')
 tagger = TnT()
 tagger.load(data_path)
 

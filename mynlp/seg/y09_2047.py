@@ -6,7 +6,7 @@ import marshal
 import sys
 from math import log
 
-from ..utils import frequency
+from mynlp.utils import frequency
 
 """
 实现基于字符的生成式中文分词模型。

@@ -2,9 +2,22 @@
 
 from django.db import migrations, models
 
+"""
+Django数据迁移文件，用于向已有的数据库表中添加新的字段或修改现有的字段。
+
+该迁移文件在news应用的第一个迁移文件(0001_initial)的基础上进行操作。
+其中，dependencies属性指定了该迁移文件依赖于news应用的第一个迁移文件。
+
+该迁移文件定义了两个操作：
+
+migrations.AddField操作：向news表中添加一个名为view_count的整数类型字段，默认值为0，用于记录该新闻的点击率。
+
+migrations.AlterField操作：修改news表中的subject字段，将其类型修改为CharField，最大长度为255，并将其verbose_name修改为新闻主题。
+该操作会改变该字段在数据库中的类型和长度，并修改该字段在Django模型中的verbose_name。
+"""
+
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('news', '0001_initial'),
     ]

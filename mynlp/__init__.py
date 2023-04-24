@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from . import normal
-from . import seg
-from . import sentiment
-from . import tag
-from .sim import bm25
-from .summary import textrank
-from .summary import words_merge
+from mynlp import seg, normal, sentiment, tag
+from mynlp.sim import bm25
+from mynlp.summary import textrank, words_merge
 
 """
 这段代码实现了一个自然语言处理（NLP）类，包含了常见的文本处理功能，

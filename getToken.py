@@ -3,7 +3,7 @@ import json
 import requests
 
 
-# 获取token
+# 获取百度aitoken
 def main():
     url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=7N7mI9U7oGUUviN43pHEOqUB&client_secret=sE4uyhL0DcmrXTp2tdFGLbpYGn5I75YU"
 

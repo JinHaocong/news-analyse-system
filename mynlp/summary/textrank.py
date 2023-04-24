@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from ..sim.bm25 import BM25
+from mynlp.sim.bm25 import BM25
 
 """
 实现了基于TextRank算法的关键词抽取和文本摘要功能。

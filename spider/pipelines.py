@@ -12,6 +12,8 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news_analysis_system.settings")
 django.setup()
 
+"""存储数据到数据库中"""
+
 
 class SpiderPipeline:
     def process_item(self, item, spider):

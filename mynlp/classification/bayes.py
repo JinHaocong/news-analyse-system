@@ -6,7 +6,7 @@ import marshal
 import sys
 from math import log, exp
 
-from ..utils.frequency import AddOneProb
+from mynlp.utils.frequency import AddOneProb
 
 """
 1，定义了一个 Bayes 类，包括以下方法：

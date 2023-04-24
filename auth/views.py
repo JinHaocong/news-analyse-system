@@ -1,14 +1,12 @@
-from re import U
+from functools import wraps
+
 import simplejson
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http.request import HttpRequest
+
 from index.utils import success, error
-from functools import wraps
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.http import JsonResponse
+
 
 # 用户登录装饰器，用于限制必须登录的情况
 def login_required(func):

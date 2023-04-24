@@ -5,12 +5,9 @@
 # See documentation in:
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-import random
 import time
-from datetime import datetime, timedelta
 from hashlib import md5
 
-from scrapy import signals, Item, Request
 from scrapy.utils.url import urlparse
 
 

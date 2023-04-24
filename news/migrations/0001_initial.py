@@ -2,9 +2,12 @@
 
 from django.db import migrations, models
 
+"""
+Django数据迁移文件，用于创建一个新的数据库表News。
+"""
+
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

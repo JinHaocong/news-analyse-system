@@ -11,7 +11,7 @@ import marshal
 import sys
 from math import log
 
-from . import frequency
+from mynlp.utils import frequency
 
 """
 这段代码实现了一个统计词性标注器TnT（Trigrams 'n' Tags）。

@@ -37,7 +37,8 @@ class Sentiment(object):
     def load(self, fname=data_path, iszip=True):
         self.classifier.load(fname, iszip)
 
-    def handle(self, doc):
+    @staticmethod
+    def handle(doc):
         words = seg.seg(doc)
         words = normal.filter_stop(words)
         return words

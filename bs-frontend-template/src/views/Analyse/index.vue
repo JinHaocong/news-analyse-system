@@ -97,18 +97,22 @@ export default {
     },
     methods: {
         async analyse() {
-            let { data: sentiment } = await request.post('/sentiment/', { text: this.text })
-            this.sentiment = sentiment
+            // let { data: sentiment } = await request.post('/sentiment/', { text: this.text })
+            // this.sentiment = sentiment
 
+            // 情感分析
             let { data: pie } = await request.post('/pie/', { text: this.text })
             this.pie = pie
 
+            // 词性分析
             let { data: tags } = await request.post('/tag/', { text: this.text })
             this.tags = tags
 
+            // 关键词分析(词云图)
             let { data: wordcloud } = await request.post('/keywords/', { text: this.text })
             this.wordcloud = wordcloud
 
+            // 摘要分析
             let { data: summary } = await request.post('/summary/', { text: this.text })
             this.summary = summary
         }

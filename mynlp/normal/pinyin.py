@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import codecs
 
-from ..utils.trie import Trie
+from mynlp.utils.trie import Trie
 
 """
 这段代码定义了一个 PinYin 类，其主要功能是将中文字符串转换为对应的拼音。
