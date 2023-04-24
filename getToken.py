@@ -2,9 +2,14 @@ import json
 
 import requests
 
+proxies = {
+    'http': "127.0.0.1:7890",
+    'https': "127.0.0.1:7890",
+}
+
 
 # 获取百度aitoken
-def main():
+def get_token():
     url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=7N7mI9U7oGUUviN43pHEOqUB&client_secret=sE4uyhL0DcmrXTp2tdFGLbpYGn5I75YU"
 
     payload = ""
@@ -13,7 +18,7 @@ def main():
         'Accept': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies)
 
     print(response.text)
 
@@ -29,11 +34,11 @@ def analyse():
         'Accept': 'application/json'
     }
 
-    response = requests.request("POST", url, headers=headers, data=payload)
+    response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies)
 
     print(response.text)
 
 
 if __name__ == '__main__':
-    # main()
+    # get_token()
     analyse()

@@ -9,6 +9,11 @@ from mynlp import NLP
 
 def bai_du_ai(text, result):
     """调用百度AI分析情感接口"""
+    proxies = {
+        'http': "127.0.0.1:7890",
+        'https': "127.0.0.1:7890",
+    }
+
     try:
         max_length = 1500
         text = text.replace(' ', '').replace('\n', '').replace('\t', '').replace("\u3000", '')
@@ -21,7 +26,7 @@ def bai_du_ai(text, result):
         payload = json.dumps({
             "text": texts[0]
         })
-        response = requests.request("POST", url, headers=headers, data=payload).json()
+        response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies).json()
         result[0] = response['items'][0]['positive_prob']
         result[1] = response['items'][0]['negative_prob']
         print(response)
