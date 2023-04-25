@@ -29,7 +29,7 @@ def bai_du_ai(text, result):
         result[1] = response['items'][0]['negative_prob']
         print(response)
         print(result)
-        save_file(text, result)
+        # save_file(text, result)
     except Exception as error:
         print('bai_du_ai函数报错', error)
     return result
