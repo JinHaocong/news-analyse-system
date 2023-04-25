@@ -96,7 +96,7 @@ class NLP(object):
             ret.append(scents[index])
         return ret
 
-    def keywords(self, limit=5, merge=False):
+    def keywords(self, limit=200, merge=True):
         """对文本进行关键词提取，返回指定数量的关键词"""
         doc = []
         scents = self.sentences
@@ -106,10 +106,9 @@ class NLP(object):
             doc.append(words)
         rank = textrank.KeywordTextRank(doc)
         rank.solve()
-        ret = []
-        for w in rank.top_index(limit):
-            ret.append(w)
+        ret = rank.top(limit)
         if merge:
             wm = words_merge.SimpleMerge(self.doc, ret)
             return wm.merge()
-        return ret
+        else:
+            return ret

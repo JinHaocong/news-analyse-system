@@ -69,6 +69,15 @@ class TextRank(object):
         return list(map(lambda x: self.docs[x[0]], self.top))
 
 
+"""
+遍历文本，将每个单词作为一个节点，并将同一句子中的单词连接起来，形成一个无向图。
+初始化每个节点的权重为1.0。
+通过迭代，计算每个节点的PageRank值，并将节点按照PageRank值从大到小排序，输出前N个节点作为关键词。
+具体而言，代码中的solve()函数实现了以上算法流程，包括图的构建、迭代计算节点PageRank值等。
+top_index()函数用于输出前N个关键词的索引，top()函数用于输出前N个关键词的具体文本。
+"""
+
+
 class KeywordTextRank(object):
 
     def __init__(self, docs):
@@ -78,7 +87,7 @@ class KeywordTextRank(object):
         self.d = 0.85
         self.max_iter = 200
         self.min_diff = 0.001
-        self.top = []
+        self.top_keywards = []
 
     def solve(self):
         for doc in self.docs:
@@ -116,11 +125,11 @@ class KeywordTextRank(object):
             self.vertex = m
             if max_diff <= self.min_diff:
                 break
-        self.top = list(self.vertex.items())
-        self.top = sorted(self.top, key=lambda x: x[1], reverse=True)
+        self.top_keywards = list(self.vertex.items())
+        self.top_keywards = sorted(self.top_keywards, key=lambda x: x[1], reverse=True)
 
     def top_index(self, limit):
-        return list(map(lambda x: x[0], self.top))[:limit]
+        return list(map(lambda x: x[0], self.top_keywards))[:limit]
 
     def top(self, limit):
-        return list(map(lambda x: self.docs[x[0]], self.top))
+        return [(word, weight) for word, weight in self.top_keywards[:limit]]

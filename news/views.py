@@ -4,7 +4,6 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
 from django.http.response import HttpResponse
-from jieba import analyse
 from pyecharts import options as opts
 from pyecharts.charts import Pie, WordCloud
 
@@ -103,7 +102,8 @@ def keywords(request):
     # 文本的关键词分析
     data = request.json
     text = data.get("text")
-    keywords = analyse.extract_tags(text, withWeight=True, topK=100, allowPOS=('ns', 'n', 'vn', 'v'))
+    # keywords = analyse.extract_tags(text, withWeight=True, topK=100, allowPOS=('ns', 'n', 'vn', 'v'))
+    keywords = NLP(text).keywords()
     c = (
         WordCloud()
         .add("", keywords, word_size_range=[20, 100])
