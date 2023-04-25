@@ -32,49 +32,60 @@ class NLP(object):
 
     @property
     def words(self):
+        """分词"""
         return seg.seg(self.doc)
 
     @property
     def sentences(self):
+        """切分句子"""
         return normal.get_sentences(self.doc)
 
     @property
     def han(self):
+        """繁体转简体"""
         return normal.zh2hans(self.doc)
 
     @property
     def pinyin(self):
+        """拼音"""
         return normal.get_pinyin(self.doc)
 
     @property
     def sentiments(self):
+        """情感分析"""
         return sentiment.classify(self.doc)
 
     @property
     def sentiments_model(self):
+        """情感分析"""
         return sentiment.predict(self.doc)
 
     @property
     def tags(self):
+        """词性标注"""
         words = self.words
         tags = tag.tag(words)
         return zip(words, tags)
 
     @property
     def tf(self):
+        """获取 BM25 模型中文本中每个词的词频"""
         return self.bm25.f
 
     @property
     def idf(self):
+        """获取 BM25 模型中文本中每个词的逆文档频率"""
         return self.bm25.idf
 
     def sim(self, doc):
+        """计算输入文本与当前文本之间的相似度"""
         return self.bm25.simall(doc)
 
     def summary(self, limit=5):
+        """"对文本进行��要提取，返回指定数量的关键句子"""
         doc = []
-        sents = self.sentences
-        for sent in sents:
+        scents = self.sentences
+        for sent in scents:
             words = seg.seg(sent)
             words = normal.filter_stop(words)
             doc.append(words)
@@ -82,13 +93,14 @@ class NLP(object):
         rank.solve()
         ret = []
         for index in rank.top_index(limit):
-            ret.append(sents[index])
+            ret.append(scents[index])
         return ret
 
     def keywords(self, limit=5, merge=False):
+        """对文本进行关键词提取，返回指定数量的关键词"""
         doc = []
-        sents = self.sentences
-        for sent in sents:
+        scents = self.sentences
+        for sent in scents:
             words = seg.seg(sent)
             words = normal.filter_stop(words)
             doc.append(words)

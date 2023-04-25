@@ -103,7 +103,7 @@ def keywords(request):
     # 文本的关键词分析
     data = request.json
     text = data.get("text")
-    keywords = analyse.extract_tags(text, withWeight=True, topK=100)
+    keywords = analyse.extract_tags(text, withWeight=True, topK=100, allowPOS=('ns', 'n', 'vn', 'v'))
     c = (
         WordCloud()
         .add("", keywords, word_size_range=[20, 100])
