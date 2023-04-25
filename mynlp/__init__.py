@@ -82,7 +82,7 @@ class NLP(object):
         return self.bm25.simall(doc)
 
     def summary(self, limit=5):
-        """"对文本进行��要提取，返回指定数量的关键句子"""
+        """"对文本进行摘要要提取，返回指定数量的关键句子"""
         doc = []
         scents = self.sentences
         for sent in scents:
