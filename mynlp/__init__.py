@@ -96,7 +96,7 @@ class NLP(object):
             ret.append(scents[index])
         return ret
 
-    def keywords(self, limit=150, merge=True):
+    def keywords(self, limit=200, merge=True):
         """对文本进行关键词提取，返回指定数量的关键词"""
         doc = []
         scents = self.sentences
