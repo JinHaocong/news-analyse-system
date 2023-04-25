@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import re
+
 """
 合并算法，将文本中包含的一组指定单词合并成新的单词。
 具体来说，它接收两个参数：doc 表示待合并的文本，words 是一个包含待合并单词的列表。
@@ -21,15 +23,15 @@ class SimpleMerge(object):
         for w1 in self.words:
             cw = 0
             lw = len(w1[0])
-            for i in range(len(self.doc) - lw + 1):
-                if w1[0] == self.doc[i: i + lw]:
-                    cw += w1[1]
+            pattern = re.compile(w1[0])
+            for match in pattern.findall(self.doc):
+                cw += w1[1]
             for w2 in self.words:
                 cnt = 0
                 l2 = len(w1[0]) + len(w2[0])
-                for i in range(len(self.doc) - l2 + 1):
-                    if w1[0] + w2[0] == self.doc[i: i + l2]:
-                        cnt += w2[1]
+                pattern = re.compile(w1[0] + w2[0])
+                for match in pattern.findall(self.doc):
+                    cnt += w2[1]
                 if cw < cnt * 2:
                     trans[w1[0]] = (w2[0], w1[1] + w2[1])
                     break
