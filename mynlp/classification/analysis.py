@@ -36,7 +36,7 @@ class SentimentAnalysis:
         self.pool_size = 10  # 池化层的大小
         self.dense_units = 500  # 全连接层的神经元个数
         self.dropout_rate = 0.5  # Dropout 层的比例
-        self.batch_size = 64  # 批处理大小
+        self.batch_size = 16  # 批处理大小
         self.epochs = 10  # 训练的轮数
         self.model_path = model_path  # 模型保存的路径
         self.tokenizer_path = tokenizer_path  # Tokenizer 对象保存的路径。
@@ -60,25 +60,19 @@ class SentimentAnalysis:
 
     def train(self):
         print('train')
+        # 导入数据
         positive_data = []
         negative_data = []
-        # 导入数据
-        with open(self.positive_path, 'r', encoding='utf-8') as f:
-            pos_data = f.readlines()
-        with open(self.negative_path, 'r', encoding='utf-8') as f:
-            neg_data = f.readlines()
+        pos = open(self.positive_path, 'r', encoding='utf-8')
+        neg = open(self.negative_path, 'r', encoding='utf-8')
+        for line in pos:
+            positive_data.append(eval(line.strip()))
+        for line in neg:
+            negative_data.append(eval(line.strip()))
+        pos.close()
+        neg.close()
 
-        # 去停用词
-        for line in pos_data:
-            text = seg.seg(line)
-            text = normal.filter_stop(text)
-            positive_data.append(text)
-
-        for line in neg_data:
-            text = seg.seg(line)
-            text = normal.filter_stop(text)
-            negative_data.append(text)
-            # 将标签转换为0和1
+        # 将标签转换为0和1
         labels = np.concatenate((np.ones(len(positive_data)), np.zeros(len(negative_data))))
 
         # 将文本合并并进行标记化
@@ -157,7 +151,9 @@ class SentimentAnalysis:
     def predict(self, texts):
         if self.model is None:
             raise ValueError("Model not found, please load or train a model")
-        test_sequences = self.tokenizer.texts_to_sequences(texts)
+        words = seg.seg(texts)
+        words = normal.filter_stop(words)
+        test_sequences = self.tokenizer.texts_to_sequences(words)
         test_data = pad_sequences(test_sequences, maxlen=self.max_length)
         result = np.asscalar(np.float32(self.model.predict(test_data)[0][0]))
 
