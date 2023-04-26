@@ -15,14 +15,16 @@ def bai_du_ai(text, result):
     }
 
     try:
+        max_length = 1500
         text = text.replace(' ', '').replace('\n', '').replace('\t', '').replace("\u3000", '')
         url = "https://aip.baidubce.com/rpc/2.0/nlp/v1/sentiment_classify?access_token=24.5e32b04f49903cd9e520c7a2be477c78.2592000.1684409657.282335-32554078&charset=UTF-8"
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         }
+        texts = [text[i: i + max_length] for i in range(0, len(text), max_length)]
         payload = json.dumps({
-            "text": text
+            "text": texts[0]
         })
         response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies).json()
         result[0] = response['items'][0]['positive_prob']
