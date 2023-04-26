@@ -4,7 +4,7 @@ import time
 import requests
 from django.db import models
 
-from mynlp import NLP
+from mynlp import NLP, seg, normal
 
 
 def bai_du_ai(text, result):
@@ -40,12 +40,14 @@ def bai_du_ai(text, result):
 def save_file(text, prop):
     pos = open('positive1.txt', 'a', encoding='utf-8')
     neg = open('negative1.txt', 'a', encoding='utf-8')
+    words = seg.seg(text)
+    words = normal.filter_stop(words)
     if prop[0] > prop[1]:
         # 定义为积极情感
-        pos.write(text)
+        pos.write(str(words))
         pos.write('\n')
     else:
-        neg.write(text)
+        neg.write(str(words))
         neg.write('\n')
     pos.close()
     neg.close()
