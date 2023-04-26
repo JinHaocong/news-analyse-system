@@ -1,6 +1,5 @@
 import pickle
 
-import jieba
 import numpy as np
 import pandas as pd
 from keras import Sequential
@@ -9,6 +8,8 @@ from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 from keras.utils import plot_model
+
+from mynlp import seg, normal
 
 """
 要提高模型准确率，您可以尝试调整以下参数：
@@ -69,15 +70,13 @@ class SentimentAnalysis:
 
         # 去停用词
         for line in pos_data:
-            words = jieba.lcut(line.strip())
-            words = [word for word in words if word not in self.stop_words]
-            text = ' '.join(words)
+            text = seg.seg(line)
+            text = normal.filter_stop(text)
             positive_data.append(text)
 
         for line in neg_data:
-            words = jieba.lcut(line.strip())
-            words = [word for word in words if word not in self.stop_words]
-            text = ' '.join(words)
+            text = seg.seg(line)
+            text = normal.filter_stop(text)
             negative_data.append(text)
             # 将标签转换为0和1
         labels = np.concatenate((np.ones(len(positive_data)), np.zeros(len(negative_data))))
@@ -158,10 +157,7 @@ class SentimentAnalysis:
     def predict(self, texts):
         if self.model is None:
             raise ValueError("Model not found, please load or train a model")
-        words = jieba.lcut(texts.strip())
-        words = [word for word in words if word not in self.stop_words]
-        texts = ' '.join(words)
-        test_sequences = self.tokenizer.texts_to_sequences([texts])
+        test_sequences = self.tokenizer.texts_to_sequences(texts)
         test_data = pad_sequences(test_sequences, maxlen=self.max_length)
         result = np.asscalar(np.float32(self.model.predict(test_data)[0][0]))
 
