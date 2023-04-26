@@ -70,11 +70,20 @@ class TextRank(object):
 
 
 """
-遍历文本，将每个单词作为一个节点，并将同一句子中的单词连接起来，形成一个无向图。
-初始化每个节点的权重为1.0。
-通过迭代，计算每个节点的PageRank值，并将节点按照PageRank值从大到小排序，输出前N个节点作为关键词。
-具体而言，代码中的solve()函数实现了以上算法流程，包括图的构建、迭代计算节点PageRank值等。
-top_index()函数用于输出前N个关键词的索引，top()函数用于输出前N个关键词的具体文本。
+初始化类的参数，包括文档列表 docs，词典 words，顶点列表 vertex，以及其他参数如阻尼系数 d、最大迭代次数 max_iter、最小差异 min_diff 和前 limit 个关键词 top_keywords。
+
+solve 函数实现了算法的核心逻辑。
+首先遍历所有文档，对于每个词语，如果不在词典中，则将其加入到词典 words 和顶点列表 vertex 中，同时将其加入一个队列 que 中。
+如果队列中词语数量大于 5，弹出队首元素。对于队列中的每对词语，将其相互添加到 words 中。
+
+使用迭代算法计算关键词的权重。在每次迭代中，对于每个关键词，将其在 words 中连接的所有关键词的权重加权平均，并根据阻尼系数进行调整。
+计算完成后，将结果与前一次迭代的结果比较，如果差异小于最小差异 min_diff，则认为已经收敛，退出迭代。
+最后，将关键词和对应的权重排序，并保存前 limit 个关键词。
+
+top_index 函数和 top 函数用于获取前 limit 个关键词的索引和关键词及其权重。
+
+可以看到，这个类的主要思路是将文本中的词语转换成一个有向图，然后使用迭代算法计算图中每个节点（关键词）的权重。
+相比于其他文本排名算法，Keyword-based TextRank 更加注重关键词之间的相互关系，从而得到更加准确的关键词排名结果。
 """
 
 
@@ -129,7 +138,9 @@ class KeywordTextRank(object):
         self.top_keywards = sorted(self.top_keywards, key=lambda x: x[1], reverse=True)
 
     def top_index(self, limit):
+        """返回索引"""
         return list(map(lambda x: x[0], self.top_keywards))[:limit]
 
     def top(self, limit):
+        """返回关键词及权重"""
         return [(word, weight) for word, weight in self.top_keywards[:limit]]

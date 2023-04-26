@@ -9,18 +9,33 @@ from math import log
 from mynlp.utils import frequency
 
 """
-实现基于字符的生成式中文分词模型。
-模型使用了三阶马尔可夫模型，其中uni、bi和tri分别表示了一元、二元和三元频率统计的工具类，
-save和load方法是用于保存和加载训练好的模型，train方法是用于训练模型，而log_prob和tag方法则是用于使用训练好的模型进行分词的。
-其中，tag方法中的算法是基于维特比算法的。
+__init__(): 初始化对象。
+save(): 保存对象到文件中。
+load(): 从文件中加载对象。
+div(): 计算两个数的除法，如果除数为0则返回0。
+train(): 训练模型，传入的参数data是一个二维列表，其中每个元素是一个二元组(word, tag)。
+log_prob(): 返回给定3个字符的概率的对数。
+tag(): 返回一个句子中每个字符的标注结果。
 
+类中定义的3个变量self.l1、self.l2、self.l3表示一元、二元、三元模型的权重。
+self.status表示标注状态，包括'b'(开始)、'm'(中间)、'e'(结束)、's'(独立成词)。
+self.uni、self.bi、self.tri是三个频率统计对象，分别表示一元、二元、三元模型中字符出现的频率。
+三个方法add()、freq()、get()分别用于增加频率、获取频率、获取给定元组的频率。
+函数samples()返回所有可能的三元元组。函数getsum()返回所有字符的出现次数之和。
 
-__init__ 方法：初始化一些参数，包括一阶、二阶、三阶词频和状态信息（状态信息指单字成词、多字成词等）。
-save 和 load 方法：用于将模型保存和加载。
-div 方法：除法运算，主要用于计算概率。
-train 方法：对输入的数据进行训练，计算词频和状态信息，并且计算三阶词频所占比例，用于后面计算概率。
-log_prob 方法：计算给定三个字的概率，包括一阶、二阶、三阶词频的贡献。
-tag 方法：对输入的数据进行标注，计算每个字对应的状态概率，并返回概率最大的状态。
+在train()方法中，它接受一个列表，其中每个元素是一个句子，每个句子由一系列词语组成。
+对于每个句子，它首先初始化一个长度为2的列表 now，用于存储正在处理的三元组；
+然后将两个“开始”状态的标记加入到 unigram 和 bigram 的计数中；
+接着对于句子中的每个词语，将它和对应的标记加入到 now 中，然后将它们的 unigram、bigram 和 trigram 的计数都加一。
+最后，它利用计算好的频率信息计算出每个状态的权重（l1、l2 和 l3）。
+
+在log_prob()方法中，根据三元模型的概率公式计算概率的对数。它首先分别计算出单字、双字和三字的概率，然后根据 l1、l2 和 l3 的权重将它们加权求和。
+如果给定的三个字符没有在模型中出现过，则返回负无穷。
+
+tag() 函数用于对新数据进行分词。
+它首先将前两个“开始”状态的标记加入到 now 中，
+然后对于数据中的每个字符，遍历所有状态（即 b、m、e 和 s），计算出它们的概率，并将得分最高的状态和对应的字符加入到 stage 中。
+最后，将 stage 中的信息更新到 now 中，并返回最后一个状态的序列（即分词结果）。
 """
 
 
@@ -30,7 +45,7 @@ class CharacterBasedGenerativeModel(object):
         self.l1 = 0.0
         self.l2 = 0.0
         self.l3 = 0.0
-        self.status = ('b', 'm', 'e', 's')
+        self.status = ('b', 'm', 'e', 's')  # “开始”、“中间”、“结尾”和“单个字符”
         self.uni = frequency.NormalProb()
         self.bi = frequency.NormalProb()
         self.tri = frequency.NormalProb()
@@ -105,6 +120,7 @@ class CharacterBasedGenerativeModel(object):
         self.l3 = self.div(tl3, tl1 + tl2 + tl3)
 
     def log_prob(self, s1, s2, s3):
+        """计算概率"""
         uni = self.l1 * self.uni.freq(s3)
         bi = self.div(self.l2 * self.bi.get((s2, s3))[1], self.uni.get(s2)[1])
         tri = self.div(self.l3 * self.tri.get((s1, s2, s3))[1],
