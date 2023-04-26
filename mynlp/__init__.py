@@ -58,9 +58,7 @@ class NLP(object):
     @property
     def sentiments_model(self):
         """情感分析"""
-        words = seg.seg(self.doc)
-        words = normal.filter_stop(words)
-        return sentiment.predict(words)
+        return sentiment.predict(self.doc)
 
     @property
     def tags(self):
