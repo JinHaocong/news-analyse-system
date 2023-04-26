@@ -44,10 +44,10 @@ def save_file(text, prop):
     words = normal.filter_stop(words)
     if prop[0] > prop[1]:
         # 定义为积极情感
-        pos.write(str(words))
+        pos.write(' '.join(words))
         pos.write('\n')
     else:
-        neg.write(str(words))
+        neg.write(' '.join(words))
         neg.write('\n')
     pos.close()
     neg.close()

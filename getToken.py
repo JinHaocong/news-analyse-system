@@ -39,6 +39,79 @@ def analyse():
     print(response.text)
 
 
+def test():
+    positive_data = []
+    negative_data = []
+    pos = open('positive1.txt', 'r', encoding='utf-8')
+    neg = open('negative1.txt', 'r', encoding='utf-8')
+    for line in pos:
+        positive_data.append([' '.join(eval(line.strip()))])
+    for line in neg:
+        negative_data.append([' '.join(eval(line.strip()))])
+    pos.close()
+    neg.close()
+
+    pos = open('positive1.txt', 'w', encoding='utf-8')
+    for line in positive_data:
+        pos.write(str(line))
+        pos.write('\n')
+
+    neg = open('negative1.txt', 'w', encoding='utf-8')
+    for line in negative_data:
+        neg.write(str(line))
+        neg.write('\n')
+
+    pos.close()
+    neg.close()
+
+
+def print_num():
+    with open('positive1.txt', 'r', encoding='utf-8') as f:
+        pos = f.readlines()
+    with open('negative1.txt', 'r', encoding='utf-8') as f:
+        neg = f.readlines()
+    print(f'积极{len(pos)}条，消极{len(neg)}')
+
+
+def test2():
+    pos_data = []
+    pos = open('positive.txt', 'r', encoding='utf-8')
+    for line in pos:
+        line = eval(line.strip())
+        pos_data.append(line[0])
+
+    neg_data = []
+    neg = open('negative.txt', 'r', encoding='utf-8')
+    for line in neg:
+        line = eval(line.strip())
+        neg_data.append(line[0])
+    pos.close()
+    neg.close()
+
+    pos = open('positive.txt', 'w', encoding='utf-8')
+    for line in pos_data:
+        pos.write(line)
+        pos.write('\n')
+
+    neg = open('negative.txt', 'w', encoding='utf-8')
+    for line in neg_data:
+        neg.write(line)
+        neg.write('\n')
+
+    pos.close()
+    neg.close()
+
+
+def test3():
+    lst = ['a', 'b', 'c']
+    s = ' '.join(lst)
+    print(s)
+
+
 if __name__ == '__main__':
     # get_token()
-    analyse()
+    # analyse()
+    # test()
+    # print_num()
+    # test2()
+    test3()
