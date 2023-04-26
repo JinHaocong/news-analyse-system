@@ -58,13 +58,9 @@ class NLP(object):
     @property
     def sentiments_model(self):
         """情感分析"""
-        texts = []
-        scents = self.sentences
-        for sent in scents:
-            words = seg.seg(sent)
-            words = normal.filter_stop(words)
-            texts.append(words)
-        return sentiment.predict(texts)
+        words = seg.seg(self.doc)
+        words = normal.filter_stop(words)
+        return sentiment.predict(words)
 
     @property
     def tags(self):
