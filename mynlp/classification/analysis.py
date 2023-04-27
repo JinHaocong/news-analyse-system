@@ -29,9 +29,9 @@ from mynlp import seg, normal
 class SentimentAnalysis:
     def __init__(self, model_path, tokenizer_path, positive_path, negative_path, stop_path):
         self.num_words = 5000  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
-        self.embedding_dim = 200  # 词嵌入的维度
+        self.embedding_dim = 400  # 词嵌入的维度
         self.max_length = 300  # 输入序列的最大长度
-        self.filters = 64  # 卷积层的滤波器个数
+        self.filters = 32  # 卷积层的滤波器个数
         self.kernel_size = 10  # 卷积核的大小
         self.pool_size = 10  # 池化层的大小
         self.dense_units = 10  # 全连接层的神经元个数
@@ -83,7 +83,7 @@ class SentimentAnalysis:
         np.random.shuffle(indices)
         data = data[indices]
         labels = labels[indices]
-        num_validation_samples = int(0.2 * data.shape[0])
+        num_validation_samples = int(0.3 * data.shape[0])
 
         x_train = data[:-num_validation_samples]
         y_train = labels[:-num_validation_samples]
