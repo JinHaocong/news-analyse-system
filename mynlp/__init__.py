@@ -107,15 +107,22 @@ class NLP(object):
     def keywords(self, limit=200, merge=True):
         """对文本进行关键词提取，返回指定数量的关键词"""
         doc = []
+
+        # 使用正则根据换行符，标点进行断句
         scents = self.sentences
         for sent in scents:
+            # 中文分词
             words = seg.seg(sent)
+            # 去停用词
             words = normal.filter_stop(words)
             doc.append(words)
+
+        # 提取关键词和权重
         rank = textrank.KeywordTextRank(doc)
         rank.solve()
         ret = rank.top(limit)
         if merge:
+            # 关键词权重再次合并
             wm = words_merge.SimpleMerge(self.doc, ret)
             return wm.merge()
         else:
