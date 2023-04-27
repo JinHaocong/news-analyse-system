@@ -39,6 +39,7 @@ class SinaSpider(scrapy.Spider):
                 yield scrapy.Request(url, meta=dict(page=page, lid=lid, subject=subject))
 
     def parse(self, response, *args, **kwargs):
+        """爬取每页新闻相关信息"""
         meta = response.meta
         try:
             result = json.loads(response.text)["result"]
@@ -58,6 +59,7 @@ class SinaSpider(scrapy.Spider):
 
     @staticmethod
     def parse_page(response):
+        """解析每页新闻信息"""
         meta = response.meta
         data = meta["item"]
         text = ""
