@@ -26,21 +26,21 @@ KeywordTextRank类同样接受一组文档作为输入，其中每个文档是�
 
 class TextRank(object):
 
-    def __init__(self, docs):
-        self.docs = docs
-        self.bm25 = BM25(docs)
-        self.D = len(docs)
-        self.d = 0.85
-        self.weight = []
-        self.weight_sum = []
-        self.vertex = []
-        self.max_iter = 200
-        self.min_diff = 0.001
+    def __init__(self, text_list):
+        self.text_list = text_list  # 包含待提取关键词的文本列表
+        self.bm25 = BM25(text_list)  # BM25算法
+        self.D = len(text_list)  # 文本列表的长度
+        self.d = 0.85  # TextRank算法的阻尼系数，默认为0.85。
+        self.weight = []  # 文本相似度矩阵，即每个文本与其他文本之间的相似度。
+        self.weight_sum = []  # 每个文本的相似度之和，用于计算TextRank算法的分数。
+        self.vertex = []  # 每个文本在TextRank算法中的初始分数，初始值为1.0。
+        self.max_iter = 200  # TextRank算法的最大迭代次数，默认为200。
+        self.min_diff = 0.001  # TextRank算法的最小收敛差异，默认为0.001。
         self.top = []
 
     def solve(self):
-        for cnt, doc in enumerate(self.docs):
-            scores = self.bm25.simall(doc)
+        for cnt, text in enumerate(self.text_list):
+            scores = self.bm25.simall(text)
             self.weight.append(scores)
             self.weight_sum.append(sum(scores) - scores[cnt])
             self.vertex.append(1.0)
@@ -66,7 +66,7 @@ class TextRank(object):
         return list(map(lambda x: x[0], self.top))[:limit]
 
     def top(self, limit):
-        return list(map(lambda x: self.docs[x[0]], self.top))
+        return list(map(lambda x: self.text_list[x[0]], self.top))
 
 
 """
