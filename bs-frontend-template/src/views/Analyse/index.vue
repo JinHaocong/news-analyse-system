@@ -9,14 +9,14 @@
         </el-button> -->
             </div>
             <div class='main-title'>
-                <span class='dot-line-gray' />
+                <span class='dot-line-gray'/>
                 <span class='title'>分析结果</span>
             </div>
-            <el-tabs v-model='currentTab' tab-position='left' type='border-card' style='min-height:500px;flex:1'>
+            <el-tabs v-model='currentTab' style='min-height:500px;flex:1' tab-position='left' type='border-card'>
                 <el-tab-pane label='主题分析'>
                     <div style='display:flex;justify-content:center;height:200px;align-items:center'>
                         <el-radio-group v-model='subject' size='large'>
-                            <el-radio-button v-for='c in chans' :key='c' :label='c' :disabled='subject != c' />
+                            <el-radio-button v-for='c in chans' :key='c' :disabled='subject != c' :label='c'/>
                         </el-radio-group>
                     </div>
                 </el-tab-pane>
@@ -26,7 +26,7 @@
                     </p>
                 </el-tab-pane>
                 <el-tab-pane label='关键词分析' name='keywords'>
-                    <vue-echarts v-if='currentTab == &apos;keywords&apos;' :option='wordcloud' style='heigth:500px;' />
+                    <vue-echarts v-if="currentTab == 'keywords'" :option='wordcloud' style='heigth:500px;'/>
                 </el-tab-pane>
                 <el-tab-pane label='情感分析' name='sentiment'>
                     <template>
@@ -40,21 +40,22 @@
                             </template>
                         </p>
                     </template>
-                    <vue-echarts v-if='currentTab == &apos;sentiment&apos;' :option='pie' style='heigth:300px;' />
+                    <vue-echarts v-if="currentTab == 'sentiment'" :option='pie' style='heigth:300px;'/>
                 </el-tab-pane>
                 <el-tab-pane label='词性分析'>
                     <div class='flex'>
                         <div style='max-width:80%;min-width: 80%;'>
-                            <my-tag v-for='tag, idx in tags' :key='idx' :val='tag' />
+                            <my-tag v-for='(tag, idx) in tags' :key='idx' :val='tag'/>
                         </div>
                         <div>
-                            <p style='margin-bottom: 22px;height: 45px;line-height: 45px;font-size: 16px;color: #979797;'>词性类别图示:</p>
+                            <p style='margin-bottom: 22px;height: 45px;line-height: 45px;font-size: 16px;color: #979797;'>
+                                词性类别图示:</p>
                             <el-tag
                                 v-for='value in tp'
                                 :key='value.name'
-                                style='margin-right: 10px; margin-top: 5px'
                                 :color='value.color'
                                 effect='dark'
+                                style='margin-right: 10px; margin-top: 5px'
                                 type='info'
                                 v-text='value.name'
                             />
@@ -68,9 +69,8 @@
 
 <script>
 import request from '/@/utils/request'
-import MyTag from './my-tag.vue'
-import { tp } from './my-tag.vue'
-import { ElLoading } from 'element-plus'
+import MyTag, { tp } from './my-tag.vue'
+
 export default {
     components: {
         MyTag
@@ -108,61 +108,62 @@ export default {
             const wordcloud = request.post('/keywords/', { text: this.text })
             // 摘要分析
             const summary = request.post('/summary/', { text: this.text })
-            Promise.all([pie, tags, wordcloud, summary]).then(([pie, tags, wordcloud, summary]) => {
-                this.pie = pie.data
-                this.tags = tags.data
-                this.wordcloud = wordcloud.data
-                this.summary = summary.data
-            })
+            Promise.all([pie, tags, wordcloud, summary])
+                .then(([pie, tags, wordcloud, summary]) => {
+                    this.pie = pie.data
+                    this.tags = tags.data
+                    this.wordcloud = wordcloud.data
+                    this.summary = summary.data
+                })
         }
     }
 }
 </script>
 
-<style lang="postcss" scoped>
+<style lang='postcss' scoped>
 .analyse {
-  display: flex;
-  padding: 30px;
-  justify-content: center;
-
-  .wrap {
-    width: 80%;
     display: flex;
-    flex-direction: column;
+    padding: 30px;
+    justify-content: center;
 
-    .top {
-      border-radius: 5px;
-      overflow: hidden;
-      padding: 20px;
-      background-color: rgb(246, 246, 246);
-      box-shadow: #999 1px 1px 5px;
+    .wrap {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+
+        .top {
+            border-radius: 5px;
+            overflow: hidden;
+            padding: 20px;
+            background-color: rgb(246, 246, 246);
+            box-shadow: #999 1px 1px 5px;
+        }
+
+        .main-title {
+            position: relative;
+            margin: 28px 0 22px 0;
+            height: 32px;
+            font-size: 24px;
+            line-height: 32px;
+            color: #565656;
+
+            .dot-line-gray {
+                position: absolute;
+                top: 15px;
+                left: 0;
+                right: 0;
+                z-index: 0;
+                height: 1px;
+                border: 1px dashed #888;
+            }
+
+            .title {
+                position: absolute;
+                padding-right: 26px;
+                background-color: #f0f2f5;
+                z-index: 1;
+            }
+        }
     }
-
-    .main-title {
-      position: relative;
-      margin: 28px 0 22px 0;
-      height: 32px;
-      font-size: 24px;
-      line-height: 32px;
-      color: #565656;
-
-      .dot-line-gray {
-        position: absolute;
-        top: 15px;
-        left: 0;
-        right: 0;
-        z-index: 0;
-        height: 1px;
-        border: 1px dashed #888;
-      }
-
-      .title {
-        position: absolute;
-        padding-right: 26px;
-        background-color: #f0f2f5;
-        z-index: 1;
-      }
-    }
-  }
 }
 </style>
