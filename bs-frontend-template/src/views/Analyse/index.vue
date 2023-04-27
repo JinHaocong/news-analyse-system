@@ -70,6 +70,7 @@
 import request from '/@/utils/request'
 import MyTag from './my-tag.vue'
 import { tp } from './my-tag.vue'
+import { ElLoading } from 'element-plus'
 export default {
     components: {
         MyTag
@@ -99,22 +100,20 @@ export default {
         async analyse() {
             // let { data: sentiment } = await request.post('/sentiment/', { text: this.text })
             // this.sentiment = sentiment
-
             // 情感分析
-            let { data: pie } = await request.post('/pie/', { text: this.text })
-            this.pie = pie
-
+            const pie = request.post('/pie/', { text: this.text })
             // 词性分析
-            let { data: tags } = await request.post('/tag/', { text: this.text })
-            this.tags = tags
-
+            const tags = request.post('/tag/', { text: this.text })
             // 关键词分析(词云图)
-            let { data: wordcloud } = await request.post('/keywords/', { text: this.text })
-            this.wordcloud = wordcloud
-
+            const wordcloud = request.post('/keywords/', { text: this.text })
             // 摘要分析
-            let { data: summary } = await request.post('/summary/', { text: this.text })
-            this.summary = summary
+            const summary = request.post('/summary/', { text: this.text })
+            Promise.all([pie, tags, wordcloud, summary]).then(([pie, tags, wordcloud, summary]) => {
+                this.pie = pie.data
+                this.tags = tags.data
+                this.wordcloud = wordcloud.data
+                this.summary = summary.data
+            })
         }
     }
 }
