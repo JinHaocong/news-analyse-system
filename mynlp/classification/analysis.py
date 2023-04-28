@@ -1,7 +1,6 @@
 import pickle
 
 import numpy as np
-import pandas as pd
 from keras import Sequential, regularizers
 from keras.layers import Embedding, Conv1D, MaxPooling1D, Dropout, Flatten, Dense
 from keras.models import load_model
@@ -33,7 +32,7 @@ class SentimentAnalysis:
         self.embedding_dim = 100  # 词嵌入的维度
         self.max_length = 300  # 输入序列的最大长度
         self.filters = 32  # 卷积层的滤波器个数
-        self.kernel_size = 5  # 卷积核的大小
+        self.kernel_size = 10  # 卷积核的大小
         self.pool_size = 2  # 池化层的大小
         self.dense_units = 20  # 全连接层的神经元个数
         self.dropout_rate = 0.7  # Dropout 层的比例
@@ -100,6 +99,10 @@ class SentimentAnalysis:
         plot_model(self.model, to_file='model.jpg')
 
         i = 1
+        val_losses = []
+        val_accs = []
+        train_losses = []
+        train_accs = []
         for train_index, test_index in kf.split(data):
             print(f'Fold {i}/{k}')
             x_train, x_test = data[train_index], data[test_index]
@@ -113,12 +116,32 @@ class SentimentAnalysis:
             print("测试集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
             i += 1
 
-            # 绘制训练曲线
-            from matplotlib import pyplot as plt
-            pd.DataFrame(history.history).plot(figsize=(8, 5))
-            plt.grid(True)
-            plt.gca().set_ylim(0, 1)  # set the vertical range to [0-1]
-            plt.show()
+            # 将训练和验证损失和准确率记录到列表中
+            val_losses.extend(history.history['val_loss'])
+            val_accs.extend(history.history['val_accuracy'])
+            train_losses.extend(history.history['loss'])
+            train_accs.extend(history.history['accuracy'])
+            # # 绘制训练曲线
+            # from matplotlib import pyplot as plt
+            # pd.DataFrame(history.history).plot(figsize=(8, 5))
+            # plt.grid(True)
+            # plt.gca().set_ylim(0, 1)  # set the vertical range to [0-1]
+            # plt.show()
+
+        # 绘制训练曲线
+        import matplotlib.pyplot as plt
+
+        # 绘制验证损失和训练损失
+        plt.plot(val_losses, label='val_loss')
+        plt.plot(train_losses, label='train_loss')
+        plt.legend()
+        plt.show()
+
+        # 绘制验证准确率和训练准确率
+        plt.plot(val_accs, label='val_accuracy')
+        plt.plot(train_accs, label='train_accuracy')
+        plt.legend()
+        plt.show()
 
         # 保存模型
         self.save_model()
