@@ -2,12 +2,13 @@ import pickle
 
 import numpy as np
 import pandas as pd
-from keras import Sequential
+from keras import Sequential, regularizers
 from keras.layers import Embedding, Conv1D, MaxPooling1D, Dropout, Flatten, Dense
 from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.utils import pad_sequences
 from keras.utils import plot_model
+from sklearn.model_selection import KFold
 
 from mynlp import seg, normal
 
@@ -29,12 +30,12 @@ from mynlp import seg, normal
 class SentimentAnalysis:
     def __init__(self, model_path, tokenizer_path, positive_path, negative_path, stop_path):
         self.num_words = 5000  # 初始化 Tokenizer 对象时指定的参数，用于控制词汇表的大小，仅保留出现频率最高的 num_words 个词。
-        self.embedding_dim = 400  # 词嵌入的维度
+        self.embedding_dim = 100  # 词嵌入的维度
         self.max_length = 300  # 输入序列的最大长度
         self.filters = 32  # 卷积层的滤波器个数
-        self.kernel_size = 10  # 卷积核的大小
-        self.pool_size = 10  # 池化层的大小
-        self.dense_units = 10  # 全连接层的神经元个数
+        self.kernel_size = 5  # 卷积核的大小
+        self.pool_size = 2  # 池化层的大小
+        self.dense_units = 20  # 全连接层的神经元个数
         self.dropout_rate = 0.7  # Dropout 层的比例
         self.batch_size = 16  # 批处理大小
         self.epochs = 10  # 训练的轮数
@@ -58,7 +59,7 @@ class SentimentAnalysis:
             for line in f:
                 self.stop_words.add(line.strip())
 
-    def train(self):
+    def train(self, k=5):
         print('train')
         # 导入数据
         with open(self.positive_path, 'r', encoding='utf-8') as f:
@@ -78,17 +79,8 @@ class SentimentAnalysis:
         # 将序列填充到最大长度
         data = pad_sequences(sequences, maxlen=self.max_length)
 
-        # 打乱数据并划分训练和测试数据集
-        indices = np.arange(data.shape[0])
-        np.random.shuffle(indices)
-        data = data[indices]
-        labels = labels[indices]
-        num_validation_samples = int(0.3 * data.shape[0])
-
-        x_train = data[:-num_validation_samples]
-        y_train = labels[:-num_validation_samples]
-        x_test = data[-num_validation_samples:]
-        y_test = labels[-num_validation_samples:]
+        # 定义 KFold 对象
+        kf = KFold(n_splits=k, shuffle=True)
 
         # 构建卷积神经网络模型
         self.model = Sequential()
@@ -97,7 +89,8 @@ class SentimentAnalysis:
         self.model.add(MaxPooling1D(pool_size=self.pool_size))
         self.model.add(Dropout(self.dropout_rate))
         self.model.add(Flatten())
-        self.model.add(Dense(self.dense_units, activation='relu'))
+        self.model.add(Dense(self.dense_units, activation='relu', kernel_regularizer=regularizers.l2(0.005),
+                             activity_regularizer=regularizers.l1(0.005)))
         self.model.add(Dropout(self.dropout_rate))
         self.model.add(Dense(1, activation='sigmoid'))
         self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -106,21 +99,26 @@ class SentimentAnalysis:
         # 绘制模型结构到文件
         plot_model(self.model, to_file='model.jpg')
 
-        # 训练模型
-        history = self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=self.epochs,
-                                 batch_size=self.batch_size)
-        # verbose 是否显示日志信息，0不显示，1显示进度条，2不显示进度条
-        loss, accuracy = self.model.evaluate(x_train, y_train, verbose=1)
-        print("训练集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
-        loss, accuracy = self.model.evaluate(x_test, y_test, verbose=1)
-        print("测试集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
+        i = 1
+        for train_index, test_index in kf.split(data):
+            print(f'Fold {i}/{k}')
+            x_train, x_test = data[train_index], data[test_index]
+            y_train, y_test = labels[train_index], labels[test_index]
+            history = self.model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=self.epochs,
+                                     batch_size=self.batch_size)
+            # verbose 是否显示日志信息，0不显示，1显示进度条，2不显示进度条
+            loss, accuracy = self.model.evaluate(x_train, y_train, verbose=1)
+            print("训练集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
+            loss, accuracy = self.model.evaluate(x_test, y_test, verbose=1)
+            print("测试集：loss {0:.3f}, 准确率：{1:.3f}".format(loss, accuracy))
+            i += 1
 
-        # 绘制训练曲线
-        from matplotlib import pyplot as plt
-        pd.DataFrame(history.history).plot(figsize=(8, 5))
-        plt.grid(True)
-        plt.gca().set_ylim(0, 1)  # set the vertical range to [0-1]
-        plt.show()
+            # 绘制训练曲线
+            from matplotlib import pyplot as plt
+            pd.DataFrame(history.history).plot(figsize=(8, 5))
+            plt.grid(True)
+            plt.gca().set_ylim(0, 1)  # set the vertical range to [0-1]
+            plt.show()
 
         # 保存模型
         self.save_model()
