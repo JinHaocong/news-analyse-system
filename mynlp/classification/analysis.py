@@ -121,12 +121,6 @@ class SentimentAnalysis:
             val_accs.extend(history.history['val_accuracy'])
             train_losses.extend(history.history['loss'])
             train_accs.extend(history.history['accuracy'])
-            # # 绘制训练曲线
-            # from matplotlib import pyplot as plt
-            # pd.DataFrame(history.history).plot(figsize=(8, 5))
-            # plt.grid(True)
-            # plt.gca().set_ylim(0, 1)  # set the vertical range to [0-1]
-            # plt.show()
 
         # 绘制训练曲线
         import matplotlib.pyplot as plt
