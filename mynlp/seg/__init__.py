@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 import re
 
-from mynlp.seg import seg as TnTseg
+from mynlp.seg.seg import Seg
 
 """
 中文分词的功能，采用的是基于隐马尔可夫模型（Hidden Markov Model，简称 HMM）的分词算法。主要涉及的函数有：
@@ -24,11 +25,13 @@ from mynlp.seg import seg as TnTseg
     它使用了 HMM 模型对输入的中文字符串进行分词，并将分词结果以列表的形式返回。
 """
 
-segger = TnTseg.Seg()
-re_zh = re.compile('([\u4E00-\u9FA5]+)')
+segger = Seg()
 
 
 def seg(sent):
+    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'seg.marshal')
+    segger.load(data_path, True)
+    re_zh = re.compile('([\u4E00-\u9FA5]+)')
     words = []
     for s in re_zh.split(sent):
         s = s.strip()
@@ -44,14 +47,11 @@ def seg(sent):
     return words
 
 
-def train(fname):
+def train(dname, mname, iszip=True):
     global segger
-    segger = TnTseg.Seg()
-    segger.train(fname)
-
-
-def save(fname, iszip=True):
-    segger.save(fname, iszip)
+    segger = Seg()
+    segger.train(dname)
+    segger.save(mname, iszip)
 
 
 def load(fname, iszip=True):
@@ -60,3 +60,9 @@ def load(fname, iszip=True):
 
 def single_seg(sent):
     return list(segger.seg(sent))
+
+
+if __name__ == '__main__':
+    train('data.txt', 'seg.marshal')
+    print(seg('基于三阶隐马尔可夫模型的中文文本分词算法。'))
+    print(seg('主要是用来放置一些简单快速的中文分词的程序！'))

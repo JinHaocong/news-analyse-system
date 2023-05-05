@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import codecs
 import os
 
-from mynlp.seg.seg import Seg
+from mynlp.seg import seg
 from mynlp.utils.tnt import TnT
 
 """
@@ -19,12 +19,11 @@ from mynlp.utils.tnt import TnT
 该模块的目的是为了方便使用TnT算法对中文文本进行分词和词性标注，提供了训练、保存、加载和标注等功能。
 """
 
-data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tag.marshal')
-tagger = TnT(data_path)
+tagger = TnT()
 
 
-def train(fname):
-    fr = codecs.open(fname, 'r', 'utf-8')
+def train(dname, mname, iszip=True):
+    fr = codecs.open(dname, 'r', 'utf-8')
     data = []
     for i in fr:
         line = i.strip()
@@ -34,11 +33,9 @@ def train(fname):
         data.append(tmp)
     fr.close()
     global tagger
+    tagger = TnT()
     tagger.train(data)
-
-
-def save(fname, iszip=True):
-    tagger.save(fname, iszip)
+    tagger.save(mname, iszip)
 
 
 def load(fname, iszip=True):
@@ -50,12 +47,12 @@ def tag_all(words):
 
 
 def tag(words):
+    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tag.marshal')
+    tagger.load(data_path)
     return map(lambda x: x[1], tag_all(words))
 
 
 if __name__ == '__main__':
-    Seg = Seg()
-    word = Seg.seg('这是一个词性标注的算法。')
-    train('199801.txt')
-    save('tag.marshal')
+    word = seg('这是一个词性标注的算法。')
+    train('199801.txt', 'tag.marshal')
     print(list(tag_all(word)))

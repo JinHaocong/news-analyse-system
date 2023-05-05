@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import gzip
 import marshal
-import os
 import sys
 from math import log
 
@@ -50,11 +49,6 @@ class CharacterBasedGenerativeModel(object):
         self.uni = frequency.NormalProb()
         self.bi = frequency.NormalProb()
         self.tri = frequency.NormalProb()
-        try:
-            data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'seg.marshal')
-            self.load(data_path)
-        except Exception as error:
-            print(error, '分词模型未找到')
 
     def save(self, fname, iszip=True):
         d = {}

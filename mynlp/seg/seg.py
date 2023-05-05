@@ -63,20 +63,3 @@ class Seg(object):
         if tmp:
             result.append(tmp)
         return result
-
-
-def seg_test(text):
-    my_seg = Seg()
-    print(' '.join(my_seg.seg(text)))
-
-
-def seg_train(text):
-    my_seg = Seg()
-    my_seg.train('data.txt')
-    my_seg.save('seg.marshal')
-    print(' '.join(my_seg.seg(text)))
-
-
-if __name__ == '__main__':
-    seg_train('基于三阶隐马尔可夫模型的中文文本分词算法。')
-    seg_test('主要是用来放置一些简单快速的中文分词的程序！')
