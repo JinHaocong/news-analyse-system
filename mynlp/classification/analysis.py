@@ -1,3 +1,4 @@
+import os
 import pickle
 
 import numpy as np
@@ -24,6 +25,8 @@ from mynlp import seg, normal
 7，batch_size：增加 batch_size 的值可以加快模型的训练速度，但是，如果 batch_size 的值过大，可能会导致内存不足。
 8，epochs：增加 epochs 的值可以提高模型的准确率，但是需要更长的训练时间。
 """
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 class SentimentAnalysis:
