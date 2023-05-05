@@ -55,7 +55,7 @@ TnT算法的整个流程：
 
 class TnT(object):
 
-    def __init__(self, N=1000):
+    def __init__(self, data_path, N=1000):
         self.N = N
         self.l1 = 0.0
         self.l2 = 0.0
@@ -69,6 +69,11 @@ class TnT(object):
         self.tri = frequency.NormalProb()
         self.word = {}
         self.trans = {}
+
+        try:
+            self.load(data_path)
+        except Exception as error:
+            print(error, '词性标注模型未找到')
 
     def save(self, fname, iszip=True):
         d = {}

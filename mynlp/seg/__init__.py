@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import os
 import re
 
 from mynlp.seg import seg as TnTseg
@@ -25,10 +24,7 @@ from mynlp.seg import seg as TnTseg
     它使用了 HMM 模型对输入的中文字符串进行分词，并将分词结果以列表的形式返回。
 """
 
-data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                         'seg.marshal')
 segger = TnTseg.Seg()
-segger.load(data_path, True)
 re_zh = re.compile('([\u4E00-\u9FA5]+)')
 
 

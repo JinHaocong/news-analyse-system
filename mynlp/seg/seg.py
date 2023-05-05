@@ -67,7 +67,6 @@ class Seg(object):
 
 def seg_test(text):
     my_seg = Seg()
-    my_seg.load('seg.marshal')
     print(' '.join(my_seg.seg(text)))
 
 

@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import codecs
 import os
 
+from mynlp.seg.seg import Seg
 from mynlp.utils.tnt import TnT
 
 """
@@ -19,8 +20,7 @@ from mynlp.utils.tnt import TnT
 """
 
 data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tag.marshal')
-tagger = TnT()
-tagger.load(data_path)
+tagger = TnT(data_path)
 
 
 def train(fname):
@@ -34,7 +34,6 @@ def train(fname):
         data.append(tmp)
     fr.close()
     global tagger
-    tagger = TnT()
     tagger.train(data)
 
 
@@ -55,6 +54,8 @@ def tag(words):
 
 
 if __name__ == '__main__':
+    Seg = Seg()
+    word = Seg.seg('这是一个词性标注的算法。')
     train('199801.txt')
     save('tag.marshal')
-    print(list(tag_all('这是一个用来词性标注的算法。')))
+    print(list(tag_all(word)))
