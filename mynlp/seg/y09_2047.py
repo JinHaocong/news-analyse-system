@@ -132,8 +132,13 @@ class CharacterBasedGenerativeModel(object):
 
     def log_prob(self, s1, s2, s3):
         """计算概率"""
+        # 单字概率
         uni = self.l1 * self.uni.freq(s3)
+
+        # 相邻两字概率
         bi = self.div(self.l2 * self.bi.get((s2, s3))[1], self.uni.get(s2)[1])
+
+        # 相邻三字概率
         tri = self.div(self.l3 * self.tri.get((s1, s2, s3))[1],
                        self.bi.get((s1, s2))[1])
         if uni + bi + tri == 0:
@@ -141,14 +146,17 @@ class CharacterBasedGenerativeModel(object):
         return log(uni + bi + tri)
 
     def tag(self, data):
+        # 初始化当前状态列表now，每个状态是一个三元组，包含当前状态、当前状态的概率和当前状态的路径
         now = [((('', 'BOS'), ('', 'BOS')), 0.0, [])]
         for w in data:
+            # 存放新状态
             stage = {}
             not_found = True
             for s in self.status:
                 if self.uni.freq((w, s)) != 0:
                     not_found = False
                     break
+
             if not_found:
                 for s in self.status:
                     for pre in now:
@@ -156,6 +164,7 @@ class CharacterBasedGenerativeModel(object):
                 now = list(map(lambda x: (x[0], x[1][0], x[1][1]),
                                stage.items()))
                 continue
+
             for s in self.status:
                 for pre in now:
                     p = pre[1] + self.log_prob(pre[0][0], pre[0][1], (w, s))
