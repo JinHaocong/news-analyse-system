@@ -93,12 +93,16 @@ class CharacterBasedGenerativeModel(object):
     def train(self, data):
         for sentence in data:
             now = [('', 'BOS'), ('', 'BOS')]
+            # 初始化计数器
             self.bi.add((('', 'BOS'), ('', 'BOS')), 1)
             self.uni.add(('', 'BOS'), 2)
             for word, tag in sentence:
                 now.append((word, tag))
+                # 单字频率
                 self.uni.add((word, tag), 1)
+                # 相邻两字频率
                 self.bi.add(tuple(now[1:]), 1)
+                # 相邻三字频率
                 self.tri.add(tuple(now), 1)
                 now.pop(0)
         tl1 = 0.0
@@ -106,9 +110,16 @@ class CharacterBasedGenerativeModel(object):
         tl3 = 0.0
         samples = sorted(self.tri.samples(), key=lambda x: self.tri.get(x)[1])
         for now in samples:
+
+            # 三元组的频率/三元组前两位组成的二元组的频率
             c3 = self.div(self.tri.get(now)[1] - 1, self.bi.get(now[:2])[1] - 1)
+
+            # 三元组后两位的频率/三元组第二位的频率
             c2 = self.div(self.bi.get(now[1:])[1] - 1, self.uni.get(now[1])[1] - 1)
+
+            # 三元组最后一位频率/所有频率
             c1 = self.div(self.uni.get(now[2])[1] - 1, self.uni.getsum() - 1)
+
             if c3 >= c1 and c3 >= c2:
                 tl3 += self.tri.get(now)[1]
             elif c2 >= c1 and c2 >= c3:
