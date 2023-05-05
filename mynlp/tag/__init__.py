@@ -52,3 +52,9 @@ def tag_all(words):
 
 def tag(words):
     return map(lambda x: x[1], tag_all(words))
+
+
+if __name__ == '__main__':
+    train('199801.txt')
+    save('tag.marshal')
+    print(list(tag_all('这是一个用来词性标注的算法。')))
