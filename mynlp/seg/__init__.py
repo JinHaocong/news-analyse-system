@@ -26,11 +26,11 @@ from mynlp.seg.seg import Seg
 """
 
 segger = Seg()
+data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'seg.marshal')
+segger.load(data_path, True)
 
 
 def seg(sent):
-    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'seg.marshal')
-    segger.load(data_path, True)
     re_zh = re.compile('([\u4E00-\u9FA5]+)')
     words = []
     for s in re_zh.split(sent):

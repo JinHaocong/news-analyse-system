@@ -20,6 +20,8 @@ from mynlp.utils.tnt import TnT
 """
 
 tagger = TnT()
+data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tag.marshal')
+tagger.load(data_path)
 
 
 def train(dname, mname, iszip=True):
@@ -47,8 +49,6 @@ def tag_all(words):
 
 
 def tag(words):
-    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tag.marshal')
-    tagger.load(data_path)
     return map(lambda x: x[1], tag_all(words))
 
 
