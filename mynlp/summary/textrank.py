@@ -34,14 +34,17 @@ class TextRank(object):
         self.weight = []  # 文本相似度矩阵，即每个文本与其他文本之间的相似度。
         self.weight_sum = []  # 每个文本的相似度之和，用于计算TextRank算法的分数。
         self.vertex = []  # 每个文本在TextRank算法中的初始分数，初始值为1.0。
-        self.max_iter = 200  # TextRank算法的最大迭代次数，默认为200。
-        self.min_diff = 0.001  # TextRank算法的最小收敛差异，默认为0.001。
+        self.max_iter = 2000  # TextRank算法的最大迭代次数，默认为2000。
+        self.min_diff = 0.0001  # TextRank算法的最小收敛差异，默认为0.0001。
         self.top = []
 
     def solve(self):
         for cnt, text in enumerate(self.text_list):
+            # 计算出当前text与text_list中所有的相似度
             scores = self.bm25.simall(text)
             self.weight.append(scores)
+
+            # 排除于自己的相似度并求和
             self.weight_sum.append(sum(scores) - scores[cnt])
             self.vertex.append(1.0)
         for _ in range(self.max_iter):
@@ -52,8 +55,7 @@ class TextRank(object):
                 for j in range(self.D):
                     if j == i or self.weight_sum[j] == 0:
                         continue
-                    m[-1] += (self.d * self.weight[j][i]
-                              / self.weight_sum[j] * self.vertex[j])
+                    m[-1] += (self.d * self.weight[j][i] / self.weight_sum[j] * self.vertex[j])
                 if abs(m[-1] - self.vertex[i]) > max_diff:
                     max_diff = abs(m[-1] - self.vertex[i])
             self.vertex = m
@@ -65,8 +67,8 @@ class TextRank(object):
     def top_index(self, limit):
         return list(map(lambda x: x[0], self.top))[:limit]
 
-    def top(self, limit):
-        return list(map(lambda x: self.text_list[x[0]], self.top))
+    def top_list(self, limit):
+        return list(map(lambda x: self.text_list[x[0]], self.top))[:limit]
 
 
 """
@@ -94,8 +96,8 @@ class KeywordTextRank(object):
         self.words = {}
         self.vertex = {}
         self.d = 0.85
-        self.max_iter = 200
-        self.min_diff = 0.001
+        self.max_iter = 2000
+        self.min_diff = 0.0001
         self.top_keywards = []
 
     def solve(self):
