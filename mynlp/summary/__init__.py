@@ -12,7 +12,6 @@ def summary(text):
         # 去停用词
         words = filter_stop(words)
         doc.append(words)
-    a = doc
     t = TextRank(doc)
     t.solve()
 
@@ -34,7 +33,6 @@ def keywords(text):
         # 去停用词
         words = filter_stop(words)
         doc.append(words)
-    a = doc
     t = KeywordTextRank(doc)
     t.solve()
     print(t.top(10))
