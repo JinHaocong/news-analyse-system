@@ -108,10 +108,29 @@ def test3():
     print(s)
 
 
+def test4():
+    with open('positive1.txt', 'r', encoding='utf-8') as f:
+        pos_data = f.readlines()
+    print(len(pos_data), '1')
+    pos_data = set(pos_data)
+    print(len(pos_data), '2')
+    with open('positive1.txt', 'w', encoding='utf-8') as f:
+        f.writelines(pos_data)
+
+    with open('negative1.txt', 'r', encoding='utf-8') as f:
+        neg_data = f.readlines()
+    print(len(neg_data), '1')
+    neg_data = set(neg_data)
+    print(len(neg_data), '2')
+    with open('negative1.txt', 'w', encoding='utf-8') as f:
+        f.writelines(neg_data)
+
+
 if __name__ == '__main__':
     # get_token()
     # analyse()
     # test()
     # print_num()
     # test2()
-    test3()
+    # test3()
+    test4()
