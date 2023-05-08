@@ -120,10 +120,3 @@ node_modules
 db.sqlite3
 .gitignore
 dist
-positive1.txt
-negative1.txt
-/mynlp/sentiment/model.h5
-/mynlp/sentiment/negative.txt
-/mynlp/sentiment/positive.txt
-/mynlp/sentiment/tokenizer.pickle
-/mynlp/sentiment/tencent-ailab-embedding-zh-d200-v0.2.0.txt
